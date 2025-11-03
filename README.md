@@ -14,6 +14,7 @@ Students and new graduates struggle to discover relevant job opportunities in Ma
 | [Joblink](https://joblink.maine.gov/)   | Jered | TBD  |
 | [JobsInMaine](https://jobsinmaine.com/jobs)   | Kadin | TBD  |
 | Skills   | Ellis | Nov 7, 2025  |
+| Colleges / Universities   | Ellis | Nov 7, 2025  |
 
 ### SQL
 |    Task     | Assignee       | Deadline        |
