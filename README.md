@@ -7,20 +7,57 @@ Students and new graduates struggle to discover relevant job opportunities in Ma
 |   Email  | ellis.fitzgerald@maine.edu   | jered.kalombo@maine.edu | kadin.ilott@maine.edu  |
 
 ## Tasks
-### Scraping
-|    Task     | Assignee       | Deadline        |
-|------------|-----------|-----------|
-| [Indeed](https://indeed.com)   | Ellis | TBD  |
-| [Joblink](https://joblink.maine.gov/)   | Jered | TBD  |
-| [JobsInMaine](https://jobsinmaine.com/jobs)   | Kadin | TBD  |
-| Skills   | Ellis | Nov 7, 2025  |
-| Colleges / Universities   | Ellis | Nov 7, 2025  |
+Due dates are similar to keep everyone moving at the same pace and collaborate on any issues.
 
-### SQL
+### Initial SQL Schemas
+The tables and schemas scripts are more trivial than the scraping, so we should have basic version done sooner.
 |    Task     | Assignee       | Deadline        |
 |------------|-----------|-----------|
-| Skill   | Ellis | Nov 7, 2025  |
-| StudentAlum   | Jered | TBD  |
-| Job   | Kadin | TBD  |
-| Employer   | Kadin | TBD  |
-| Education   | Ellis | TBD  |
+| Skill Tables   | Ellis | Nov 7, 2025  |
+| Education Tables   | Ellis | Nov 7, 2025  |
+| Resource Tables | Ellis | Nov 7, 2025 |
+| StudentAlum Tables   | Jered | Nov 7, 2025  |
+| Recruiter Tables   | Jered | Nov 7, 2025  |
+| Employer Tables   | Kadin | Nov 7, 2025  |
+| Job Tables   | Kadin | Nov 7, 2025  |
+
+### Scraping
+Scraping is a little harder, so more time is allocated for these responsibilities.
+|    Task     | Assignee       | Deadline        |
+|------------|-----------|-----------|
+| [Indeed](https://indeed.com)   | Ellis | Nov 11, 2025  |
+| [Joblink](https://joblink.maine.gov/)   | Jered | Nov 11, 2025  |
+| [JobsInMaine](https://jobsinmaine.com/jobs)   | Kadin | Nov 11, 2025  |
+| Skills   | Collaborative / Get from job website scrape | Nov 11, 2025  |
+| Maine Towns | Jered | Nov 13, 2025 |
+| Maine Zipcodes & Towns  | Kadin | Nov 13, 2025 |
+| Resources | Ellis | Nov 13, 2025 |
+| Colleges / Universities   | Ellis | ✅  |
+
+### Scraping Documentation
+|    Task     | Assignee       | Deadline        |
+|------------|-----------|-----------|
+| Job Website Scrape Incl. Skills   | All | Nov 14, 2025  |
+| Maine Locations (Zip, town, counties) | Ellis | Nov 14, 2025 |
+| Colleges / Universities   | Ellis | ✅  |
+
+### Executable Build & Video Demonstration
+Once all tables/schemas scripts are written and the data source is available, each should be responsible for linking their data with their SQL script.
+|    Collaborative - Nov 14, 2025     |
+|------------|
+
+## Meetings
+|    Time     | Topics  |    Status  |   
+|------------|-----------|-----------|
+| Nov 4, 2025 2:00 PM EST  | Understanding of responsibilities, questions, blockers, etc. | ⏹️ |
+| Nov 6, 2025 2:00 PM EST  | Meet before SQL script deadline. | ❓ |
+| Nov 11, 2025 2:00 PM EST  | Meet before bulk of scrape deadlines. | ❓ |
+| Nov 13, 2025 2:00 PM EST  | Meet before final deadlines. Conclude steps for final build. Check documentation to make sure consistent. | ❓ |
+
+## Branches
+Commits should be done through branches to prevent any conflicts and a stable upstream.
+|    Name     | Branch  |  
+|------------|-----------|
+| Ellis  | `ellis-tasks` |
+| Jered  | `jered-tasks` |
+| Kadin  | `kadin-tasks` |
