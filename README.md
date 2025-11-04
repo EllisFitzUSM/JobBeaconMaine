@@ -11,7 +11,7 @@ Due dates are similar to keep everyone moving at the same pace and collaborate o
 
 ### Initial SQL Schemas
 The tables and schemas scripts are more trivial than the scraping, so we should have basic version done sooner.
-|    Task     | Assignee       | Deadline        |
+|    Task     | Assignee       | Deadline / Status        |
 |------------|-----------|-----------|
 | Skill Tables   | Ellis | Nov 7, 2025  |
 | Education Tables   | Ellis | Nov 7, 2025  |
@@ -23,22 +23,24 @@ The tables and schemas scripts are more trivial than the scraping, so we should 
 
 ### Scraping
 Scraping is a little harder, so more time is allocated for these responsibilities.
-|    Task     | Assignee       | Deadline        |
+|    Task     | Assignee       | Deadline / Status        |
 |------------|-----------|-----------|
 | [Indeed](https://indeed.com)   | Ellis | Nov 11, 2025  |
 | [Joblink](https://joblink.maine.gov/)   | Jered | Nov 11, 2025  |
 | [JobsInMaine](https://jobsinmaine.com/jobs)   | Kadin | Nov 11, 2025  |
 | Skills   | Collaborative / Get from job website scrape | Nov 11, 2025  |
 | Maine Towns | Jered | Nov 13, 2025 |
-| Maine Zipcodes & Towns  | Kadin | Nov 13, 2025 |
+| Maine Zipcodes & Counties | Kadin | Nov 13, 2025 |
 | Resources | Ellis | Nov 13, 2025 |
 | Colleges / Universities   | Ellis | ✅  |
 
 ### Scraping Documentation
-|    Task     | Assignee       | Deadline        |
+The job website scraping documentation is expected to be the bulk of the work. Maine specific scraping documentation can be brief.
+|    Task     | Assignee       | Deadline / Status        |
 |------------|-----------|-----------|
 | Job Website Scrape Incl. Skills   | All | Nov 14, 2025  |
-| Maine Locations (Zip, town, counties) | Ellis | Nov 14, 2025 |
+| Maine Towns | Jered | Nov 14, 2025 |
+| Maine Zipcodes & Counties | Kadin | Nov 14, 2025 |
 | Colleges / Universities   | Ellis | ✅  |
 
 ### Executable Build & Video Demonstration
