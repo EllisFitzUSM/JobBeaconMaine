@@ -52,15 +52,16 @@ Due dates are similar to keep everyone moving at the same pace and collaborate o
 ### Final Tasks
 |    Task     | Assignee       | Deadline / Status        |
 |------------|-----------|-----------|
-| Video   | Ellis | Nov 14, 2025  |
+| Video   | Ellis, Jered, Kadin | Nov 14, 2025  |
+| Video Edit & Combine  | Ellis | Nov 14, 2025  |
 | ReadMe   | Jered | Nov 14, 2025  |
 | Query Analysis    | Kadin | Nov 14, 2025  |
 
 ## Meetings
 |    Time     | Topics  |    Status  |   
 |------------|-----------|-----------|
-| Nov 4, 2025 2:00 PM EST  | Understanding of responsibilities, questions, blockers, etc. Agree on the data that should be cleaned and what format to return the data in. | ⏹️ |
-| Nov 6, 2025 2:00 PM EST  | Meet before SQL script deadline. | ❓ |
+| Nov 4, 2025 2:00 PM EST  | Understanding of responsibilities, questions, blockers, etc. Agree on the data that should be cleaned and what format to return the data in. | ✅ |
+| Nov 6, 2025 2:00 PM EST  | Meeting before scraping deadline. Getting up to speed and agreeing on data format. | ⏹️ |
 | Nov 11, 2025 2:00 PM EST  | Make sure scraping scripts are final. Decide if any changes need to be made. | ❓ |
 | Nov 13, 2025 2:00 PM EST  | Meet before final deadlines. Conclude steps for final build. Check documentation to make sure consistent. | ❓ |
 
