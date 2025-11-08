@@ -13,19 +13,21 @@ Due dates are similar to keep everyone moving at the same pace and collaborate o
 |    Task     | Assignee       | Deadline / Status        |
 |------------|-----------|-----------|
 | Maine Colleges & Universities   | Ellis | ✅  |
-| [Indeed](https://indeed.com)   | Ellis | Nov 7, 2025  |
+| [Indeed](https://indeed.com)   | Ellis | ✅  |
 | [Joblink](https://joblink.maine.gov/)   | Jered | Nov 7, 2025  |
 | [JobsInMaine](https://jobsinmaine.com/jobs)   | Kadin | Nov 7, 2025  |
 | Maine Zipcodes, Towns, & Counties | Kadin | Nov 7, 2025 |
-| Skills   | Ellis, Jered, Kadin | Nov 7, 2025  |
+| Skill Extraction   | Ellis | Nov 9, 2025  |
 | Resources | Ellis, Jered, Kadin | Nov 8, 2025 |
 
 ### Scraping Documentation
 |    Task     | Assignee       | Deadline / Status        |
 |------------|-----------|-----------|
-| Maine Colleges & Universities   | Ellis | Nov 8, 2025  |
+| Maine Colleges & Universities   | Ellis | ✅  |
+| Job Website  | Ellis | ✅  |
+| Skill Extraction  | Ellis | Nov 9, 2025  |
 | Maine Zipcodes, Towns, & Counties | Kadin | Nov 8, 2025 |
-| Job Website  | Ellis, Jered, Kadin | Nov 8, 2025  |
+| Job Website  | Jered, Kadin | Nov 8, 2025  |
 | Resources | Ellis, Jered, Kadin | Nov 9, 2025 |
 
 ### SQL Schemas
@@ -61,7 +63,7 @@ Due dates are similar to keep everyone moving at the same pace and collaborate o
 |    Time     | Topics  |    Status  |   
 |------------|-----------|-----------|
 | Nov 4, 2025 2:00 PM EST  | Understanding of responsibilities, questions, blockers, etc. Agree on the data that should be cleaned and what format to return the data in. | ✅ |
-| Nov 6, 2025 2:00 PM EST  | Meeting before scraping deadline. Getting up to speed and agreeing on data format. | ⏹️ |
+| Nov 6, 2025 2:00 PM EST  | Meeting before scraping deadline. Getting up to speed and agreeing on data format. | ✅ |
 | Nov 11, 2025 2:00 PM EST  | Make sure scraping scripts are final. Decide if any changes need to be made. | ❓ |
 | Nov 13, 2025 2:00 PM EST  | Meet before final deadlines. Conclude steps for final build. Check documentation to make sure consistent. | ❓ |
 
