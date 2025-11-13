@@ -33,9 +33,9 @@ Due dates are similar to keep everyone moving at the same pace and collaborate o
 ### SQL Schemas
 |    Task     | Assignee       | Deadline / Status        |
 |------------|-----------|-----------|
-| Skill Tables   | Ellis | Nov 10, 2025  |
-| Education Tables   | Ellis | Nov 10, 2025  |
-| Resource Tables | Ellis | Nov 10, 2025 |
+| Skill Tables   | Ellis | ✅ (Missing JOB_SKILL relationship)  |
+| Education Tables   | Ellis | ✅ |
+| Resource Tables | Ellis | ✅ |
 | StudentAlum Tables   | Jered | Nov 10, 2025  |
 | Recruiter Tables   | Jered | Nov 10, 2025  |
 | Employer Tables   | Kadin | Nov 10, 2025  |

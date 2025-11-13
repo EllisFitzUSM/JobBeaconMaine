@@ -1,0 +1,5 @@
+DROP TABLE IF EXISTS `USER`;
+CREATE TABLE `job_beacon_maine`.`USER` (
+  `idUSER` INT NOT NULL,
+  PRIMARY KEY (`idUSER`)
+);
