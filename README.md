@@ -14,11 +14,11 @@ Due dates are similar to keep everyone moving at the same pace and collaborate o
 |------------|-----------|-----------|
 | Maine Colleges & Universities   | Ellis | ✅  |
 | [Indeed](https://indeed.com)   | Ellis | ✅  |
-| [liveandworkinmaine](https://www.liveandworkinmaine.com/)   | Jered | Nov 7, 2025  |
+| [liveandworkinmaine](https://www.liveandworkinmaine.com/)   | Jered | ✅  |
 | [JobsInMaine](https://jobsinmaine.com/jobs)   | Kadin | ✅  |
 | Maine Zipcodes, Towns, & Counties | Kadin | ✅ |
 | Skill Extraction   | Ellis | ✅  |
-| Resources | Ellis, Jered, Kadin | Nov 8, 2025 |
+| Resources | Jered | Nov 8, 2025 |
 
 ### Scraping Documentation
 |    Task     | Assignee       | Deadline / Status        |
@@ -26,46 +26,74 @@ Due dates are similar to keep everyone moving at the same pace and collaborate o
 | Maine Colleges & Universities   | Ellis | ✅  |
 | Job Website  | Ellis | ✅  |
 | Skill Extraction  | Ellis | ✅  |
-| Maine Zipcodes, Towns, & Counties | Kadin | ? |
-| Job Website  | Jered, Kadin | Nov 8, 2025  |
-| Resources | Ellis, Jered, Kadin | Nov 9, 2025 |
+| Maine Zipcodes, Towns, & Counties | Kadin | Nov 8, 2025 |
+| Job Website  | Kadin | Nov 8, 2025  |
+| Resources | Jered | Nov 9, 2025 |
 
 ### SQL Schemas
 |    Task     | Assignee       | Deadline / Status        |
 |------------|-----------|-----------|
-| Skill Tables   | Ellis | ✅ (Missing JOB_SKILL relationship)  |
-| Education Tables   | Ellis | ✅ |
+| Skill Table   | Ellis | ✅  |
+| JobRequiresSkill Table   | Ellis | Nov 13, 2025  |
+| StudentAlumHasSkill Table   | Ellis | Nov 13, 2025  |
+| ResourceTeachesSkill Table   | Ellis | ✅ |
+| Education Table   | Ellis | ✅ |
+| HigherEducationInstitute Table   | Ellis | ✅ |
 | Resource Tables | Ellis | ✅ |
-| StudentAlum Tables   | Jered | Nov 10, 2025  |
-| Recruiter Tables   | Jered | Nov 10, 2025  |
+| User Table   | Jered | Nov 10, 2025  |
+| StudentAlum Table   | Jered | Nov 10, 2025  |
+| Recruiter Table   | Jered | Nov 10, 2025  |
 | Employer Tables   | Kadin | Nov 10, 2025  |
-| Job Tables   | Kadin | Nov 10, 2025  |
+| JobTable   | Kadin | Nov 10, 2025  |
+| JobApplication Table  | Kadin | Nov 10, 2025  |
+| Employer Table   | Kadin | Nov 10, 2025  |
+| WorksAt Table   | Kadin | Nov 10, 2025  |
+| MaineLocation Table | Kadin | Nov 14, 2025 |
 
-### SQL Procedures + Functions
+*If your table references another table's primary key AND it is NOT among your own responsibilities AND it does NOT already exist in the repository... just create a temporary one. It could be as basic as the following:*
+```sql
+CREATE TABLE `job_beacon_maine`.`{Insert table dependency name}` (
+  `id{Insert table dependency name}` INT NOT NULL,
+  PRIMARY KEY (`id{Insert table dependency name}`)
+);
+```
+
+### SQL Index
 |    Task     | Assignee       | Deadline / Status        |
 |------------|-----------|-----------|
-| Referral System (Give & Request)   | Ellis | Nov 13, 2025  |
-| Job Match Score   | Ellis | Nov 13, 2025  |
-| Get Resources Based On Missing Skills | Kadin | Nov 13, 2025  |
-| Job Expiration Trigger   | Kadin | Nov 13, 2025  |
-| Missing Skills  | Jered | Nov 13, 2025  |
-| Job Application Status   | Jered | Nov 13, 2025  |
+| Write a (or multiple) `{table_name}_index.sql` files which index upon a table you wrote. ADD SQL CODE COMMENTS FOR JUSTIFICATION! | Ellis, Jered, Kadin | Nov 14, 2025 |
+
+As seen on [W3Schools](https://www.w3schools.com/mysql/mysql_create_index.asp):
+```sql
+CREATE INDEX index_name ON table_name (column1, column2, ...);
+```
+
+### SQL Procedures + Functions + Triggers
+|    Task     | Assignee       | Deadline / Status        |
+|------------|-----------|-----------|
+| Basic read & write operations on tables that you were responsible for writing.| Ellis, Jered, Kadin | Nov 13, 2025  |
+| "AlumniReferral"   | Ellis | Nov 13, 2025  |
+| "ResourcesBasedOnMissingSkills"   | Ellis | Nov 13, 2025  |
+| "JobMatchScore"  | Kadin | Nov 13, 2025  |
+| "RemoveExpiredJobs"   | Kadin | Nov 13, 2025  |
+| "MissingSkills" | Jered | Nov 13, 2025  |
+| "JobApplicationStatus"   | Jered | Nov 13, 2025  |
 
 ### Final Tasks
 |    Task     | Assignee       | Deadline / Status        |
 |------------|-----------|-----------|
-| Video   | Ellis, Jered, Kadin | Nov 14, 2025  |
+| Video: Demonstrate the `CREATE DATABASE` for `job_beacon_maine` then running the tables *YOU* wrote (with the addition of other tables if yours rely on them via a dependency). Secondly, the procedures and functions that *YOU* wrote and discuss their purpose. Finally, demonstrate you running your scraping scripts. Could be as simple as getting one data entry.   | Ellis, Jered, Kadin | Nov 14, 2025  |
 | Video Edit & Combine  | Ellis | Nov 14, 2025  |
-| ReadMe   | Jered | Nov 14, 2025  |
-| Query Analysis    | Kadin | Nov 14, 2025  |
+| "How To Run" ReadMe   | Ellis | Nov 14, 2025  |
+| Query Analysis: Write a few queries for the database *before* you have ran any index SQL statements like so: `{table_name}_index.sql`. Then run said index statements and run the same queries to demonstrate performance gains.   | Kadin | Nov 15, 2025  |
 
 ## Meetings
 |    Time     | Topics  |    Status  |   
 |------------|-----------|-----------|
 | Nov 4, 2025 2:00 PM EST  | Understanding of responsibilities, questions, blockers, etc. Agree on the data that should be cleaned and what format to return the data in. | ✅ |
 | Nov 6, 2025 2:00 PM EST  | Meeting before scraping deadline. Getting up to speed and agreeing on data format. | ✅ |
-| Nov 11, 2025 2:00 PM EST  | Make sure scraping scripts are final. Decide if any changes need to be made. | ❓ |
-| Nov 13, 2025 2:00 PM EST  | Meet before final deadlines. Conclude steps for final build. Check documentation to make sure consistent. | ❓ |
+| Nov 11, 2025 2:00 PM EST  | Make sure scraping scripts are final. Decide if any changes need to be made. | ❌ (Holiday) |
+| Nov 13, 2025 2:00 PM EST  | Meet before final deadlines. Conclude steps for final build. Check documentation to make sure consistent. | ✅  |
 
 ## Branches
 Commits should be done through branches to prevent any conflicts and a stable upstream.
