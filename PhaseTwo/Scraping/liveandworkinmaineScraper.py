@@ -1,15 +1,36 @@
 import requests
 from bs4 import BeautifulSoup
+import pandas as pd
+import time
 
-base_url = 'https://careers.liveandworkinmaine.com/search'
-response = requests.get(base_url, headers={'User-Agent': 'Mozilla/5.0'})
-soup = BeautifulSoup(response.text, 'html.parser')
+jobs = []
+max_jobs = 120  # stops after getting 120 jobs
 
-job_divs = soup.find_all('div', class_='title')
+page = 1
+while True:
+    if len(jobs) >= max_jobs:
+        print("Reached job limit. Stopping scrape.")
+        break
 
-for div in job_divs:
-    a_tag = div.find('a')
-    if a_tag and a_tag.get('href'):
+    url = f"https://careers.liveandworkinmaine.com/search?page={page}"
+    response = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    job_divs = soup.find_all('div', class_='title')
+    if not job_divs:
+        print(f"No jobs found on page {page}. Stopping.")
+        break
+
+    print(f"Scraping page {page} ({len(job_divs)} jobs found)")
+
+    for div in job_divs:
+        if len(jobs) >= max_jobs:
+            break
+
+        a_tag = div.find('a')
+        if not a_tag or not a_tag.get('href'):
+            continue
+
         href = a_tag['href']
         full_url = f"https://careers.liveandworkinmaine.com{href}"
         title = a_tag.get_text(strip=True)
@@ -17,45 +38,48 @@ for div in job_divs:
         job_response = requests.get(full_url, headers={'User-Agent': 'Mozilla/5.0'})
         job_soup = BeautifulSoup(job_response.text, 'html.parser')
 
-        # Posted date
-        posted_date_tag = job_soup.find('span', id='lblOutPostedDate')
-        posted_date = posted_date_tag.get_text(strip=True) if posted_date_tag else "N/A"
+        employer_name = job_soup.find('span', id='lblOutCompany')
+        employer_name = employer_name.get_text(strip=True) if employer_name else "N/A"
 
-        # Address
-        address_tag = job_soup.find('span', id='lblOutAddress')
-        if address_tag:
-            lines = list(address_tag.stripped_strings)
-            if len(lines) >= 3:
-                street = " / ".join(lines[:-2])
-                city_state_zip = lines[-2]
-                country = lines[-1]
+        employer_website = job_soup.find('a', id='hlOutCompanyURL')
+        employer_website = employer_website.get('href') if employer_website else "N/A"
 
-                if ',' in city_state_zip:
-                    city, state_zip = city_state_zip.split(',', 1)
-                    city = city.strip()
-                    state_zip = state_zip.strip()
-                    if ' ' in state_zip:
-                        state, zip_code = state_zip.split(' ', 1)
-                    else:
-                        state, zip_code = state_zip, ""
-                else:
-                    city = state = zip_code = ""
+        location_tag = job_soup.find('span', id='lblOutAddress')
+        location = " ".join(location_tag.stripped_strings) if location_tag else "N/A"
+
+        salary_tag = job_soup.find('span', id='lblOutSalary')
+        salary_text = salary_tag.get_text(strip=True) if salary_tag else ""
+        min_salary = max_salary = ""
+        if "$" in salary_text:
+            parts = salary_text.replace("$", "").replace(",", "").split("-")
+            if len(parts) == 2:
+                min_salary = f"${parts[0].strip()}"
+                max_salary = f"${parts[1].strip()}"
             else:
-                street = city = state = zip_code = country = "N/A"
-        else:
-            street = city = state = zip_code = country = "N/A"
+                min_salary = max_salary = salary_text.strip()
 
-        # Industry
-        industry_tag = job_soup.find('span', id='lblCF91')
-        industry = industry_tag.get_text(strip=True) if industry_tag else "N/A"
+        posted_date = job_soup.find('span', id='lblOutPostedDate')
+        posted_date = posted_date.get_text(strip=True) if posted_date else "N/A"
 
-        print("Job Title:", title)
-        print("Job URL:", full_url)
-        print("Posted Date:", posted_date)
-        print("Street:", street)
-        print("City:", city)
-        print("State:", state)
-        print("Zip Code:", zip_code)
-        print("Country:", country)
-        print("Industry:", industry)
-        print("-" * 50)
+        apply_tag = job_soup.find('a', id='hlOutApply')
+        apply_url = apply_tag.get('href') if apply_tag else full_url
+
+        jobs.append({
+            "Job Title": title,
+            "Employer Website": employer_website,
+            "Employer Name": employer_name,
+            "Location": location,
+            "Min Salary": min_salary,
+            "Max Salary": max_salary,
+            "Posted At": posted_date,
+            "Application URL": apply_url
+        })
+
+        print(f"Saved job #{len(jobs)}: {title}")
+        time.sleep(0.1)
+
+    page += 1
+
+df = pd.DataFrame(jobs)
+df.to_csv("liveandworkinmaine_jobs.csv", index=False, sep='\t')
+print(f"Saved {len(df)} jobs to liveandworkinmaine_jobs.csv")
