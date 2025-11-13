@@ -15,9 +15,9 @@ Due dates are similar to keep everyone moving at the same pace and collaborate o
 | Maine Colleges & Universities   | Ellis | ✅  |
 | [Indeed](https://indeed.com)   | Ellis | ✅  |
 | [Joblink](https://joblink.maine.gov/)   | Jered | Nov 7, 2025  |
-| [JobsInMaine](https://jobsinmaine.com/jobs)   | Kadin | Nov 7, 2025  |
-| Maine Zipcodes, Towns, & Counties | Kadin | Nov 7, 2025 |
-| Skill Extraction   | Ellis | Nov 9, 2025  |
+| [JobsInMaine](https://jobsinmaine.com/jobs)   | Kadin | ✅  |
+| Maine Zipcodes, Towns, & Counties | Kadin | ✅ |
+| Skill Extraction   | Ellis | ✅  |
 | Resources | Ellis, Jered, Kadin | Nov 8, 2025 |
 
 ### Scraping Documentation
@@ -25,8 +25,8 @@ Due dates are similar to keep everyone moving at the same pace and collaborate o
 |------------|-----------|-----------|
 | Maine Colleges & Universities   | Ellis | ✅  |
 | Job Website  | Ellis | ✅  |
-| Skill Extraction  | Ellis | Nov 9, 2025  |
-| Maine Zipcodes, Towns, & Counties | Kadin | Nov 8, 2025 |
+| Skill Extraction  | Ellis | ✅  |
+| Maine Zipcodes, Towns, & Counties | Kadin | ? |
 | Job Website  | Jered, Kadin | Nov 8, 2025  |
 | Resources | Ellis, Jered, Kadin | Nov 9, 2025 |
 
