@@ -16,7 +16,3 @@ USE job_beacon_maine;
 -- - Checking if a user is a recruiter
 -- The index already exists due to the foreign key constraint,
 -- so we don't need to create it again.
-
--- If the RECRUITER table had additional columns like Company_ID, Position, etc.,
--- we would add indexes on those columns here.
--- For now, the automatic foreign key index is sufficient for this table's needs.
