@@ -1,25 +1,12 @@
--- Created with help from ChatGPT
-CREATE DOMAIN MAINE_SCHOOL AS VARCHAR(255)
-CHECK (VALUE IN (
-
-    ));
-CREATE TABLE EDUCATION (
-    Education_ID     SERIAL PRIMARY KEY,
-    User_ID          INT NOT NULL,
-    University       MAINE_SCHOOL NOT NULL,
-    Degree           VARCHAR(255) NOT NULL CHECK (Degree IN (
-                        'Associate',
-                        'Bachelor',
-                        'Master',
-                        'Doctorate',
-                        'Certificate'
-                    )),
-    Graduation_Date  DATE NOT NULL,
-    Is_Graduated     BOOLEAN GENERATED ALWAYS AS (
-                        CASE
-                            WHEN Graduation_Date <= CURRENT_DATE THEN TRUE
-                            ELSE FALSE
-                        END
-                     ) STORED,
-    FOREIGN KEY (User_ID) REFERENCES USER(User_ID)
+DROP TABLE IF EXISTS `EDUCATION`;
+CREATE TABLE `job_beacon_maine`.`EDUCATION` (
+  `idEDUCATION` INT NOT NULL,
+  `DEGREE` ENUM('Bachelors','Masters','Associates','PHD') NOT NULL,
+  `GRAD_DATE` datetime NOT NULL,
+  `idUSER` INT NOT NULL,
+  `idHIGHER_EDUCATION_INSTUTITE` INT NOT NULL,
+  PRIMARY KEY (`idEDUCATION`),
+  KEY `idUSER_idx` (`idUSER`),
+  CONSTRAINT `idUSER` FOREIGN KEY (`idUSER`) REFERENCES `USER` (`idUSER`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `idHIGHER_EDUCATION_INSTUTITE` FOREIGN KEY (`idHIGHER_EDUCATION_INSTUTITE`) REFERENCES `HIGHER_EDUCATION_INSTUTITE` (`idHIGHER_EDUCATION_INSTUTITE`) ON DELETE CASCADE ON UPDATE CASCADE
 );
