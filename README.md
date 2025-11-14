@@ -28,6 +28,7 @@ Due dates are similar to keep everyone moving at the same pace and collaborate o
 | Skill Extraction  | Ellis | ✅  |
 | Maine Zipcodes, Towns, & Counties | Kadin | Nov 8, 2025 |
 | Job Website  | Kadin | Nov 8, 2025  |
+| Job Website  | Jered | ✅  |
 | Resources | Jered | Nov 9, 2025 |
 
 ### SQL Schemas
@@ -40,15 +41,14 @@ Due dates are similar to keep everyone moving at the same pace and collaborate o
 | Education Table   | Ellis | ✅ |
 | HigherEducationInstitute Table   | Ellis | ✅ |
 | Resource Tables | Ellis | ✅ |
-| User Table   | Jered | Nov 10, 2025  |
-| StudentAlum Table   | Jered | Nov 10, 2025  |
-| Recruiter Table   | Jered | Nov 10, 2025  |
-| Employer Tables   | Kadin | Nov 10, 2025  |
+| User Table   | Jered | ✅  |
+| StudentAlum Table   | Jered | ✅  |
+| Recruiter Table   | Jered | ✅  |
 | JobTable   | Kadin | Nov 10, 2025  |
 | JobApplication Table  | Kadin | Nov 10, 2025  |
 | Employer Table   | Kadin | Nov 10, 2025  |
 | WorksAt Table   | Kadin | Nov 10, 2025  |
-| MaineLocation Table | Kadin | Nov 14, 2025 |
+<!--| MaineLocation Table | Kadin | Nov 14, 2025 |-->
 
 *If your table references another table's primary key AND it is NOT among your own responsibilities AND it does NOT already exist in the repository... just create a temporary one. It could be as basic as the following:*
 ```sql
@@ -71,7 +71,8 @@ CREATE INDEX index_name ON table_name (column1, column2, ...);
 ### SQL Procedures + Functions + Triggers
 |    Task     | Assignee       | Deadline / Status        |
 |------------|-----------|-----------|
-| Basic read & write operations on tables that you were responsible for writing.| Ellis, Jered, Kadin | Nov 13, 2025  |
+| Basic read & write operations on tables that you were responsible for writing.| Ellis, Kadin | Nov 13, 2025  |
+| Basic read & write operations on tables that you were responsible for writing.| Jered | ✅  |
 | "AlumniReferral"   | Ellis | Nov 13, 2025  |
 | "ResourcesBasedOnMissingSkills"   | Ellis | Nov 13, 2025  |
 | "JobMatchScore"  | Kadin | Nov 13, 2025  |
@@ -82,7 +83,7 @@ CREATE INDEX index_name ON table_name (column1, column2, ...);
 ### Final Tasks
 |    Task     | Assignee       | Deadline / Status        |
 |------------|-----------|-----------|
-| Video: Demonstrate the `CREATE DATABASE` for `job_beacon_maine` then running the tables *YOU* wrote (with the addition of other tables if yours rely on them via a dependency). Secondly, the procedures and functions that *YOU* wrote and discuss their purpose. Finally, demonstrate you running your scraping scripts. Could be as simple as getting one data entry.   | Ellis, Jered, Kadin | Nov 14, 2025  |
+| Video: Demonstrate the `CREATE DATABASE` for `job_beacon_maine` then running the tables *YOU* wrote (with the addition of other tables if yours rely on them via a dependency). Secondly, the procedures and functions that *YOU* wrote and discuss their purpose. Thirdly, any index statements that optimize selections. Finally, demonstrate you running your scraping scripts. Could be as simple as getting one data entry.   | Ellis, Jered, Kadin | Nov 14, 2025  |
 | Video Edit & Combine  | Ellis | Nov 14, 2025  |
 | "How To Run" ReadMe   | Ellis | Nov 14, 2025  |
 | Query Analysis: Write a few queries for the database *before* you have ran any index SQL statements like so: `{table_name}_index.sql`. Then run said index statements and run the same queries to demonstrate performance gains.   | Kadin | Nov 15, 2025  |
