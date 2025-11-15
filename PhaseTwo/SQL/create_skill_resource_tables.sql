@@ -3,6 +3,7 @@ USE `job_beacon_maine`;
 
 -- Drop existing tables if they exist.
 DROP TABLE IF EXISTS `SKILL`;
+DROP TABLE IF EXISTS `RESOURCE`;
 DROP TABLE IF EXISTS `SKILL_RESOURCE`;
 
 -- SKILL table to store various skills. Reasoning for ID is in case for future skill aliasing.
@@ -13,13 +14,10 @@ CREATE TABLE `SKILL` (
   UNIQUE KEY `NAME_UNIQUE` (`NAME`)
 );
 
--- Drop RESOURCE if it already exists.
-DROP TABLE IF EXISTS `RESOURCE`;
-
 -- RESOURCE for SKILL educational resources.
 CREATE TABLE `RESOURCE` (
   `idRESOURCE` INT NOT NULL AUTO_INCREMENT,
-  `URL` VARCHAR(45) NOT NULL,
+  `URL` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`idRESOURCE`)
 );
 
@@ -28,15 +26,48 @@ CREATE TABLE `SKILL_RESOURCE` (
   `idRESOURCE` INT NOT NULL,
   `idSKILL` INT NOT NULL,
   PRIMARY KEY (`idRESOURCE`, `idSKILL`),
-  INDEX `idSKILL_idx` (`idSKILL` ASC) VISIBLE,
-  CONSTRAINT `idSKILL`
+  CONSTRAINT `fk_skill_resource_skill`
     FOREIGN KEY (`idSKILL`)
-    REFERENCES `job_beacon_maine`.`SKILL` (`idSKILL`)
+    REFERENCES `SKILL` (`idSKILL`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `idRESOURCE`
+  CONSTRAINT `fk_sill_resource_resource`
     FOREIGN KEY (`idRESOURCE`)
-    REFERENCES `job_beacon_maine`.`RESOURCE` (`idRESOURCE`)
+    REFERENCES `RESOURCE` (`idRESOURCE`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+-- REQUIRES SKILL many to many table between JOB and SKILL.
+CREATE TABLE `REQUIRES_SKILL` (
+  `idJOB` INT NOT NULL,
+  `idSKILL` INT NOT NULL,
+  PRIMARY KEY (`idJOB`, `idSKILL`),
+  CONSTRAINT `fk_requires_skill_job`
+    FOREIGN KEY (`idJOB`)
+    REFERENCES `JOB` (`idJOB`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_requires_skill_skill`
+    FOREIGN KEY (`idSKILL`)
+    REFERENCES `SKILL` (`idSKILL`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+-- HAS SKILL many to many table between STUDENT_ALUM and SKILL.
+CREATE TABLE `HAS_SKILL` (
+  `idUSER` INT NOT NULL,
+  `idSKILL` INT NOT NULL,
+  PRIMARY KEY (`idUSER`, `idSKILL`),
+  CONSTRAINT `fk_has_skill_user`
+    FOREIGN KEY (`idUSER`)
+    REFERENCES `STUDENT_ALUM` (`User_ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_has_skill_skill`
+    FOREIGN KEY (`idSKILL`)
+    REFERENCES `SKILL` (`idSKILL`)
     ON DELETE CASCADE
     ON UPDATE CASCADE
 );

@@ -1,35 +1,66 @@
-DELIMITER $$
+USE `job_beacon_maine`;
 
-CREATE PROCEDURE AllSkillsSorted()
-BEGIN
-    SELECT * FROM SKILL ORDER BY Skill_Name ASC;
-END$$
-
-DELIMITER ;
-
-DELIMITER $$
-
-CREATE PROCEDURE GetSkillsForJob (
-    IN p_Job_ID INT
+-- Create a skill
+DROP PROCEDURE IF EXISTS `sp_CreateSkill`;
+CREATE PROCEDURE `sp_CreateSkill` (
+    IN `p_NAME` VARCHAR(255)
 )
 BEGIN
-    SELECT s.Skill_ID, s.Skill_Name
-    FROM SKILL s
-    JOIN REQUIRES_SKILL r ON s.Skill_ID = r.Skill_ID
-    WHERE r.Job_ID = p_Job_ID
-    ORDER BY s.Skill_Name;
-END$$
+    IF `p_NAME` IS NULL OR `p_NAME` = '' THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Skill name cannot be empty';
+    END IF;
 
-DELIMITER ;
+    IF EXISTS (SELECT 1 FROM `SKILL` WHERE `NAME` = `p_NAME`) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Skill already exists';
+    END IF;
 
-DELIMITER $$
+    INSERT INTO `SKILL` (`NAME`)
+    VALUES (`p_NAME`);
+END;
 
-CREATE PROCEDURE sp_AddSkillToStudent (
-    IN p_User_ID INT,
-    IN p_Skill_ID INT
+-- Get all the skills in the database sorted alphabetically.
+DROP PROCEDURE IF EXISTS `sp_GetAllSkillsSorted`;
+CREATE PROCEDURE `sp_GetAllSkillsSorted`()
+BEGIN
+    SELECT * FROM `SKILL` ORDER BY `NAME` ASC;
+END;
+
+-- Procedure to get skills required for a specific job.
+DROP PROCEDURE IF EXISTS `sp_GetSkillsForJob`;
+CREATE PROCEDURE `sp_GetSkillsForJob` (
+    IN `p_idJOB` INT
 )
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM STUDENT_ALUM WHERE User_ID = p_User_ID) THEN
+    SELECT `s.idSKILL`, `s.NAME`
+    FROM `SKILL` s
+    JOIN `REQUIRES_SKILL` r ON `idSKILL` = `r.idSKILL`
+    WHERE `r.idSKILL` = `p_idJOB`
+    ORDER BY `s.NAME`;
+END;
+
+-- Get students skills.
+DROP PROCEDURE IF EXISTS `sp_GetStudentsSkills`;
+CREATE PROCEDURE `sp_GetStudentsSkills` (
+    IN `p_idUSER` INT
+)
+BEGIN
+    SELECT `s.idSKILL`, `s.NAME`
+    FROM `SKILL` s
+    JOIN `REQUIRES_SKILL` r ON `idSKILL` = `r.idSKILL`
+    WHERE `r.idSKILL` = `p_idJOB`
+    ORDER BY `s.NAME`;
+END;
+
+-- Help with ChatGPT to make it so no silent failure occurs.
+DROP PROCEDURE IF EXISTS `sp_AddSkillToStudent`;
+CREATE PROCEDURE `sp_AddSkillToStudent` (
+    IN `p_User_ID` INT,
+    IN `p_idSKILL` INT
+)
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM `STUDENT_ALUM` WHERE `idUSER` = `p_User_ID`) THEN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'Student does not exist';
     END IF;
@@ -49,6 +80,34 @@ BEGIN
 
     INSERT INTO HAS_SKILL (User_ID, Skill_ID)
     VALUES (p_User_ID, p_Skill_ID);
-END$$
+END;
 
-DELIMITER ;
+-- Remove skill from student
+
+-- Get skill by ID.
+DROP PROCEDURE IF EXISTS `sp_GetSkillByID`;
+CREATE PROCEDURE `sp_GetSkillByID` (
+    IN `p_idSKILL` INT
+)
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM `SKILL` WHERE `idSKILL` = `p_idSKILL`) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Skill does not exist';
+    END IF;
+
+    SELECT * FROM `SKILL` WHERE `idSKILL` = `p_idSKILL`;
+END;
+
+-- Get skill by name.
+DROP PROCEDURE IF EXISTS `sp_GetSkillByName`;
+CREATE PROCEDURE `sp_GetSkillByName` (
+    IN `p_NAME` VARCHAR(45)
+)
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM `SKILL` WHERE `NAME` = `p_NAME`) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Skill does not exist';
+    END IF;
+
+    SELECT * FROM `SKILL` WHERE `NAME` = `p_NAME`;
+END;
