@@ -5,6 +5,8 @@ USE `job_beacon_maine`;
 DROP TABLE IF EXISTS `SKILL`;
 DROP TABLE IF EXISTS `RESOURCE`;
 DROP TABLE IF EXISTS `SKILL_RESOURCE`;
+DROP TABLE IF EXISTS `REQUIRES_SKILL`;
+DROP TABLE IF EXISTS `HAS_SKILL`;
 
 -- SKILL table to store various skills. Reasoning for ID is in case for future skill aliasing.
 CREATE TABLE `SKILL` (
@@ -45,7 +47,7 @@ CREATE TABLE `REQUIRES_SKILL` (
   PRIMARY KEY (`idJOB`, `idSKILL`),
   CONSTRAINT `fk_requires_skill_job`
     FOREIGN KEY (`idJOB`)
-    REFERENCES `JOB` (`idJOB`)
+    REFERENCES `Jobs` (`job_id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_requires_skill_skill`

@@ -56,30 +56,30 @@ END;
 -- Help with ChatGPT to make it so no silent failure occurs.
 DROP PROCEDURE IF EXISTS `sp_AddSkillToStudent`;
 CREATE PROCEDURE `sp_AddSkillToStudent` (
-    IN `p_User_ID` INT,
+    IN `p_idUSER` INT,
     IN `p_idSKILL` INT
 )
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM `STUDENT_ALUM` WHERE `idUSER` = `p_User_ID`) THEN
+    IF NOT EXISTS (SELECT 1 FROM `STUDENT_ALUM` WHERE `User_ID` = `p_idUSER`) THEN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'Student does not exist';
     END IF;
 
-    IF NOT EXISTS (SELECT 1 FROM SKILL WHERE Skill_ID = p_Skill_ID) THEN
+    IF NOT EXISTS (SELECT 1 FROM `SKILL` WHERE `idSKILL` = `p_idSKILL`) THEN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'Skill does not exist';
     END IF;
 
     IF EXISTS (
-        SELECT 1 FROM HAS_SKILL 
-        WHERE User_ID = p_User_ID AND Skill_ID = p_Skill_ID
+        SELECT 1 FROM `HAS_SKILL`
+        WHERE `idUSER` = `p_idUSER` AND `idSKILL` = `p_idSKILL`
     ) THEN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'Student already has this skill';
     END IF;
 
-    INSERT INTO HAS_SKILL (User_ID, Skill_ID)
-    VALUES (p_User_ID, p_Skill_ID);
+    INSERT INTO `HAS_SKILL` (`idUSER`, `idSKILL`)
+    VALUES (`p_idUSER`, `p_idSKILL`);
 END;
 
 -- Remove skill from student

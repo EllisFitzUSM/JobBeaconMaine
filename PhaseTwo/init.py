@@ -1,6 +1,7 @@
 from data_importer import DataImporter
 import pymysql.cursors
 import argparse as ap
+import re
 
 argparser = ap.ArgumentParser(description='Build the Job Beacon Maine database')
 argparser.add_argument('--host', type=str, default='localhost', help='Database host')
@@ -18,26 +19,26 @@ drop_tables_file = 'PhaseTwo/SQL/drop_tables.sql'
 create_table_files_ordered = [
     'PhaseTwo/SQL/create_user_tables.sql',
     'PhaseTwo/SQL/create_job_employer_tables.sql',
+    'PhaseTwo/SQL/create_job_application_tables.sql',
     'PhaseTwo/SQL/create_education_tables.sql',
     'PhaseTwo/SQL/create_skill_resource_tables.sql'
 ]
 
 create_index_files_ordered = [
-    # 'SQL/create_job_indexes.sql',
     'PhaseTwo/SQL/create_education_indexes.sql',
-    'PhaseTwo/SQL/create_skill_resource_indexes.sql'
+    'PhaseTwo/SQL/create_skill_resource_indexes.sql',
+    'PhaseTwo/SQL/create_job_employer_indexes.sql',
+    'PhaseTwo/SQL/create_user_index.sql',
+    'PhaseTwo/SQL/create_recruiter_index.sql',
+    'PhaseTwo/SQL/create_student_alum_index.sql'
 ]
 
 procedures_files_ordered = [
-    'PhaseTwo/SQL/skill_resource_procedures.sql'
-    # 'PhaseTwo/SQL/education_procedures.sql',
-    # 'SQL/user_procedures.sql'
+    'PhaseTwo/SQL/skill_resource_procedures.sql',
+    'PhaseTwo/SQL/education_procedures.sql',
+    'PhaseTwo/SQL/job_application_employer_procedures.sql',
+    'PhaseTwo/SQL/user_procedures.sql'
 ]
-
-def to_sql_statements(file_path:str):
-    with open(file_path, 'r') as f:
-        content = f.read()
-    return [stmt.strip() for stmt in content.split(';') if stmt.strip()]
 
 # Connect to the database
 connection = pymysql.connect(host=args.host,
@@ -63,6 +64,10 @@ with connection:
             print(f'Executing {file_path}...')
             with open(file_path, 'r') as sql_file:
                 sql_content = sql_file.read()
+            sql_content = re.sub('DELIMITER(\s)?\$\$', '', sql_content)
+            sql_content = re.sub('DELIMITER ;', '', sql_content)
+            sql_content = re.sub('(\s)?\$\$', ';', sql_content)
+            sql_content = re.sub('USE\s.+;', 'USE `job_beacon_maine`;', sql_content)
             cursor.execute(sql_content)
     connection.commit()
 

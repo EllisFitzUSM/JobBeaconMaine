@@ -1,3 +1,5 @@
+USE `job_beacon_maine`;
+
 EXPLAIN SELECT * FROM jobs
 WHERE city = 'Auburn';
 
@@ -6,8 +8,6 @@ ON jobs(city);
 
 EXPLAIN SELECT * FROM jobs
 WHERE city = 'Auburn';
-
-
 
 EXPLAIN SELECT * FROM employer
 WHERE employer_name = 'LearnWell';

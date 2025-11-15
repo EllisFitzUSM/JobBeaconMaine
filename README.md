@@ -21,7 +21,7 @@ pip install -r requirements.txt
 
 Run `PhaseTwo/init.py` file to build the database, and optionally import the initial data. 
 
-**WARNING: It is crucial to run from the root folder of the repository, as file paths are used and are relative.**
+**WARNING: It is crucial to run from the root folder of the repository, as relative file paths are used in this step.**
 
 Usage: 
 ```
