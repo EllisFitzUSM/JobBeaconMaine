@@ -1,3 +1,5 @@
+USE `job_beacon_maine`;
+
 -- taken from Jered's work in GitHub
 CREATE TABLE IF NOT EXISTS USER(
   User_ID INT NOT NULL AUTO_INCREMENT,
