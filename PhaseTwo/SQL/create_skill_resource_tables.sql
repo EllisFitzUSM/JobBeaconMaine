@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS `HAS_SKILL`;
 -- SKILL table to store various skills. Reasoning for ID is in case for future skill aliasing.
 CREATE TABLE `SKILL` (
   `idSKILL` INT NOT NULL AUTO_INCREMENT,
-  `NAME` VARCHAR(45) DEFAULT NULL,
+  `NAME` VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (`idSKILL`),
   UNIQUE KEY `NAME_UNIQUE` (`NAME`)
 );
