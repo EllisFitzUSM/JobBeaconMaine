@@ -1,4 +1,5 @@
 from data_importer import DataImporter
+from import_utility import *
 import pymysql.cursors
 import argparse as ap
 import re
@@ -14,7 +15,7 @@ argparser.add_argument('--import_data', action='store_true', help='Whether to im
 args = argparser.parse_args()
 
 create_database_file = 'PhaseTwo/SQL/create_database.sql'
-drop_tables_file = 'PhaseTwo/SQL/drop_tables.sql'
+drop_tables_file = 'PhaseTwo/SQL/drop_tables_procedures.sql'
 
 create_table_files_ordered = [
     'PhaseTwo/SQL/create_user_tables.sql',
@@ -37,7 +38,8 @@ procedures_files_ordered = [
     'PhaseTwo/SQL/skill_resource_procedures.sql',
     'PhaseTwo/SQL/education_procedures.sql',
     'PhaseTwo/SQL/job_application_employer_procedures.sql',
-    'PhaseTwo/SQL/user_procedures.sql'
+    'PhaseTwo/SQL/user_procedures.sql',
+    'PhaseTwo/SQL/job_import_procedure.sql'
 ]
 
 # Connect to the database
@@ -78,6 +80,29 @@ with connection:
                 'PhaseTwo/Data/new_england_indeed_job_skills.csv', 
                 'sp_CreateSkill',
                 ['Name']
+            ),
+            DataImporter(
+                'PhaseTwo/Data/maine_schools.csv',
+                'sp_CreateHigherEducationInstitute',
+                ['Name']
+            ),
+            DataImporter(
+                'PhaseTwo/Data/new_england_indeed_jobs.csv',
+                'sp_CreateJobWithSkills',
+                ['company', 
+                 'company_url', 
+                 'title', 
+                 {'value': 'description', 'callable': shorten_desc}, 
+                 'min_amount', 
+                 'max_amount', 
+                 'is_remote', 
+                 'location', 
+                 'location', 
+                 'location', 
+                 {'value':'location', 'callable': shorten_zip}, 
+                 'date_posted', 
+                 {'value': 'job_url_direct','callable': shorten_app_url}, 
+                 'skills'] # This is honestly bad. Just plain bad. 
             )
         ]
         for data_importer in data_importers:
