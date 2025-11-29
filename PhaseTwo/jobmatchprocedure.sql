@@ -2,6 +2,7 @@ I need to make an SQL procedure - jobmatchscore that matches a user with a job b
 attributes and skills. The following tables are for user, job, 
 and skilltables that link user and skill and user and skills and job.
 Prompt for chatgpt 5.1
+I changed the match score for remote preferences so it compared with the user preferences.
 
 DELIMITER $$
 
@@ -85,16 +86,28 @@ BEGIN
             )
 
             +
-
+            -- need to add comparison to actual preferences
+        SELECT Remote_Pref INTO @u_remote_pref
+            FROM STUDENT_ALUM
+            WHERE User_ID = p_user_id;
             -- Remote Preference Score (10 pts)
             (
-                CASE 
-                    WHEN j.Remote_Pref = 'Remote' THEN 10
-                    WHEN j.Remote_Pref = 'Hybrid' THEN 10
-                    WHEN j.Remote_Pref = 'Office' THEN 10
-                    ELSE 0
-                END
-            )
+                CASE
+        -- Perfect match
+                WHEN j.Remote_Pref = @u_remote_pref THEN 10
+        
+                -- Compatible but not ideal
+                WHEN @u_remote_pref = 'Remote' AND j.Remote_Pref = 'Hybrid' THEN 6
+                WHEN @u_remote_pref = 'Hybrid' AND j.Remote_Pref IN ('Remote','Office') THEN 6
+                WHEN @u_remote_pref = 'Office' AND j.Remote_Pref = 'Hybrid' THEN 6
+        
+                -- Weak match
+                WHEN @u_remote_pref = 'Remote' AND j.Remote_Pref = 'Office' THEN 3
+                WHEN @u_remote_pref = 'Office' AND j.Remote_Pref = 'Remote' THEN 3
+        
+                ELSE 0
+            END
+        ) 
 
             +
 
