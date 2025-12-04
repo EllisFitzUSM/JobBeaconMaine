@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>JobBeaconMaine</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="JobBeaconMaine – Your guide to career opportunities and job listings across Maine." />
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+{% end block %}
+
+{% block body %}
+    <header>
+        <nav>
+            <h1>JobBeaconMaine</h1>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="#">Jobs</a></li>
+                <li><a href="#">Employers</a></li>
+                <li><a href="#">Resources</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>Your Beacon to Career Opportunities in Maine</h2>
+            <p>Discover job openings, connect with employers, and explore career resources tailored for job seekers across Maine.</p>
+            <a class="cta" href="#">Browse Jobs</a>
+        </section>
+
+        <section class="featured-jobs">
+            <h3>Featured Job Listings</h3>
+            <div class="job-listings">
+                <!-- Job cards go here -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; {{ current_year }} JobBeaconMaine. All rights reserved.</p>
+    </footer>
+{% end block %}

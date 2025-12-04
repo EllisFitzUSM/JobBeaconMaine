@@ -1,0 +1,20 @@
+USE `job_beacon_maine`;
+
+EXPLAIN SELECT * FROM jobs
+WHERE city = 'Auburn';
+
+CREATE INDEX idx_jobs_city
+ON jobs(city);
+
+EXPLAIN SELECT * FROM jobs
+WHERE city = 'Auburn';
+
+EXPLAIN SELECT * FROM employer
+WHERE employer_name = 'LearnWell';
+
+CREATE INDEX idx_employer_name
+ON employer(employer_name);
+
+EXPLAIN SELECT * FROM employer
+WHERE employer_name = 'LearnWell';
+
