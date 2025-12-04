@@ -1,0 +1,107 @@
+DELIMITER $$
+
+CREATE PROCEDURE update_job(
+    IN p_job_id INT,
+    IN p_employer_id INT,
+    IN p_recruiter_id INT,
+    IN p_application_url VARCHAR(300),
+    IN p_job_description VARCHAR(2000),
+    IN p_job_title VARCHAR(200),
+    IN p_salary_min VARCHAR(20),
+    IN p_salary_max VARCHAR(20),
+    IN p_remote_pref VARCHAR(10),
+    IN p_location_raw VARCHAR(200),
+    IN p_city VARCHAR(100),
+    IN p_county VARCHAR(100),
+    IN p_zip_code CHAR(5),
+    IN p_posted_at DATETIME,
+    IN p_expires_at DATETIME,
+    IN p_estimated_start_date DATETIME,
+    IN p_is_expired BOOL
+)
+BEGIN
+    UPDATE Jobs
+    SET
+        employer_id = p_employer_id,
+        recruiter_id = p_recruiter_id,
+        application_url = p_application_url,
+        job_description = p_job_description,
+        job_title = p_job_title,
+        salary_min = p_salary_min,
+        salary_max = p_salary_max,
+        remote_pref = p_remote_pref,
+        location_raw = p_location_raw,
+        city = p_city,
+        county = p_county,
+        zip_code = p_zip_code,
+        posted_at = p_posted_at,
+        expires_at = p_expires_at,
+        estimated_start_date = p_estimated_start_date,
+        is_expired = p_is_expired
+    WHERE job_id = p_job_id;
+END $$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
+CREATE PROCEDURE delete_job(IN p_job_id INT)
+BEGIN
+    DELETE FROM Jobs
+    WHERE job_id = p_job_id;
+END $$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
+CREATE PROCEDURE add_job_application(
+    IN p_job_id INT,
+    IN p_user_id INT,
+    IN p_referred_by INT,
+    IN p_status ENUM('External', 'Received', 'Under_Review', 'Interview_Scheduled', 'Rejected', 'Accepted')
+)
+BEGIN
+    INSERT INTO Job_Application (job_id, user_id, referred_by, status)
+    VALUES (p_job_id, p_user_id, p_referred_by, p_status);
+END $$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
+CREATE PROCEDURE update_job_application(
+    IN p_job_id INT,
+    IN p_user_id INT,
+    IN p_referred_by INT,
+    IN p_status ENUM('External', 'Received', 'Under_Review', 'Interview_Scheduled', 'Rejected', 'Accepted')
+)
+BEGIN
+    UPDATE Job_Application
+    SET 
+        referred_by = p_referred_by,
+        status = p_status
+    WHERE job_id = p_job_id
+      AND user_id = p_user_id;
+END $$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
+CREATE PROCEDURE delete_job_application(
+    IN p_job_id INT,
+    IN p_user_id INT
+)
+BEGIN
+    DELETE FROM Job_Application
+    WHERE job_id = p_job_id
+      AND user_id = p_user_id;
+END $$
+
+DELIMITER ;
+
