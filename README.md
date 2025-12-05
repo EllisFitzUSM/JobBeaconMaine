@@ -8,41 +8,27 @@ Students and new graduates struggle to discover relevant job opportunities in Ma
 
 ## Build
 
-Clone repository and change directory
+**Clone repository and change directory**
 ```
 git clone https://github.com/EllisFitzUSM/JobBeaconMaine.git
 cd JobBeaconMaine
 ```
 
-Install requirements & dependencies.
-```
-pip install -r requirements.txt
-```
-**WARNING: Jupyter notebooks are used, which does not install all requirements.**
+**Install requirements & dependencies.**
 
-Run [`PhaseTwo/init.py`](PhaseTwo/init.py) file to build the database, and optionally import the initial data. 
-
-**WARNING: It is crucial to run from the root folder of the repository, as relative file paths are used in this step.**
-
-Usage: 
+For Unix based machines (Linux, Mac)
 ```
-python PhaseTwo/init.py [<options>]
-    --host              the database host
-    --user              the database user
-    --pw                the database pw
-    --port value        the database port 
-    --index             use index files to index db
-    --import_data       import provided data
-    --skip_drop         skip dropping tables and procedures (not recc)
+bash ./install
 ```
-The default execution (`python PhaseTwo/init.py`) is equivalent to
+For Windows (WIP)
 ```
-python PhaseTwo/init.py --host localhost --user root --pw passwd --port 3306
-```
-For taking advantage of the entire build, you most likely will want to do the following:
-```
-python PhaseTwo/init.py --host {host} --user {user} --pw {password} --port {port} --index --import_data
+install.bat
 ```
 
-## Scraping & Data Cleaning
-There are multiple scripts which execute scraping, so there is not a single command which can execute all scraping sources. Some scripts utilize API keys, so they cannot be executed by default. I highly recommend you take a look at [`PhaseTwo/Docs`](PhaseTwo/Docs) which contains information on scraping for each script. 
+**WARNING: Jupyter notebook requirements are not satisified. Though, these are not involved in the building or run process.**
+
+Default will run with port 3306 and put in admin for user and password.
+Optionally, you can provide arguments for debugging:
+```
+--d [<user>] [<password>]
+```

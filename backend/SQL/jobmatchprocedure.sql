@@ -1,8 +1,9 @@
-I need to make an SQL procedure - jobmatchscore that matches a user with a job based on the users preferences, 
+/** I need to make an SQL procedure - jobmatchscore that matches a user with a job based on the users preferences, 
 attributes and skills. The following tables are for user, job, 
 and skilltables that link user and skill and user and skills and job.
 Prompt for chatgpt 5.1
 I changed the match score for remote preferences so it compared with the user preferences.
+**/
 
 DELIMITER $$
 
