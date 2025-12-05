@@ -4,45 +4,46 @@ import pymysql.cursors
 import argparse as ap
 import re
 
-argparser = ap.ArgumentParser(description='Build the Job Beacon Maine database')
+argparser = ap.ArgumentParser(description='Build the Job Beacon Maine backend/database')
 argparser.add_argument('--host', type=str, default='localhost', help='Database host')
-argparser.add_argument('--user', type=str, default='root', help='Database user')
-argparser.add_argument('--pw', type=str, default='passwd', help='Database password')
+argparser.add_argument('--user', type=str, default='admin', help='Database user')
+argparser.add_argument('--pw', type=str, default='admin', help='Database password')
 argparser.add_argument('--port', type=int, default=3306, help='Database port')
 argparser.add_argument('--skip_drop', action='store_true', help='Skip dropping of tables')
 argparser.add_argument('--index', action='store_true', help='Create indexes after creating tables')
-argparser.add_argument('--import_data', action='store_true', help='Whether to import initial data from scraping stages.')
+argparser.add_argument('--import_backend/data', action='store_true', help='Whether to import initial backend/data from scraping stages.')
 args = argparser.parse_args()
 
-create_database_file = 'PhaseTwo/SQL/create_database.sql'
-drop_tables_file = 'PhaseTwo/SQL/drop_tables_procedures.sql'
+create_database_file = 'backend/SQL/create_backend/database.sql'
+drop_tables_file = 'backend/SQL/drop_tables_procedures.sql'
 
 create_table_files_ordered = [
-    'PhaseTwo/SQL/create_user_tables.sql',
-    'PhaseTwo/SQL/create_job_employer_tables.sql',
-    'PhaseTwo/SQL/create_job_application_tables.sql',
-    'PhaseTwo/SQL/create_education_tables.sql',
-    'PhaseTwo/SQL/create_skill_resource_tables.sql'
+    'backend/SQL/create_user_tables.sql',
+    'backend/SQL/create_job_employer_tables.sql',
+    'backend/SQL/create_job_application_tables.sql',
+    'backend/SQL/create_education_tables.sql',
+    'backend/SQL/create_skill_resource_tables.sql'
 ]
 
 create_index_files_ordered = [
-    'PhaseTwo/SQL/create_education_indexes.sql',
-    'PhaseTwo/SQL/create_skill_resource_indexes.sql',
-    'PhaseTwo/SQL/create_job_employer_indexes.sql',
-    'PhaseTwo/SQL/create_user_index.sql',
-    'PhaseTwo/SQL/create_recruiter_index.sql',
-    'PhaseTwo/SQL/create_student_alum_index.sql'
+    'backend/SQL/create_education_indexes.sql',
+    'backend/SQL/create_skill_resource_indexes.sql',
+    'backend/SQL/create_job_employer_indexes.sql',
+    'backend/SQL/create_user_index.sql',
+    'backend/SQL/create_recruiter_index.sql',
+    'backend/SQL/create_studentalum_index.sql'
 ]
 
 procedures_files_ordered = [
-    'PhaseTwo/SQL/skill_resource_procedures.sql',
-    'PhaseTwo/SQL/education_procedures.sql',
-    'PhaseTwo/SQL/job_application_employer_procedures.sql',
-    'PhaseTwo/SQL/user_procedures.sql',
-    'PhaseTwo/SQL/job_import_procedure.sql'
+    'backend/SQL/skill_resource_procedures.sql',
+    'backend/SQL/education_procedures.sql',
+    'backend/SQL/job_application_employer_procedures.sql',
+    'backend/SQL/user_procedures.sql',
+    'backend/SQL/job_import_procedure.sql'
+    # 'backend/SQL/jobmatchprocedure.sql' # this needs fixin
 ]
 
-# Connect to the database
+# Connect to the backend/database
 connection = pymysql.connect(host=args.host,
                             port=args.port,
                             user=args.user,
@@ -52,7 +53,7 @@ connection = pymysql.connect(host=args.host,
                             client_flag=pymysql.constants.CLIENT.MULTI_STATEMENTS
                             )
 
-# Build database, tables, indexes, and procedures in specified order. 
+# Build backend/database, tables, indexes, and procedures in specified order. 
 with connection:
     with connection.cursor() as cursor:
         file_order = [create_database_file]
@@ -73,21 +74,21 @@ with connection:
             cursor.execute(sql_content)
     connection.commit()
 
-    # Populate the tables with data
+    # Populate the tables with backend/data
     if args.import_data:
         data_importers = [
             DataImporter(
-                'PhaseTwo/Data/new_england_indeed_job_skills.csv', 
+                'backend/data/new_england_indeed_job_skills.csv', 
                 'sp_CreateSkill',
                 ['Name']
             ),
             DataImporter(
-                'PhaseTwo/Data/maine_schools.csv',
+                'backend/data/maine_schools.csv',
                 'sp_CreateHigherEducationInstitute',
                 ['Name']
             ),
             DataImporter(
-                'PhaseTwo/Data/new_england_indeed_jobs.csv',
+                'backend/data/new_england_indeed_jobs.csv',
                 'sp_CreateJobWithSkills',
                 ['company', 
                  'company_url', 
@@ -106,6 +107,6 @@ with connection:
             )
         ]
         for data_importer in data_importers:
-            print(f'Importing data from {data_importer.file.name}...')
+            print(f'Importing backend/data from {data_importer.file.name}...')
             data_importer.data_import(connection)
         connection.commit()
