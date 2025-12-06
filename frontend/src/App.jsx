@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home.jsx";
+import Profile from "./pages/Profile.jsx";
 import JobResults from "./pages/JobResults.jsx";
 import SignInPage from "./pages/SignInPage.jsx";
 import PersonalizedSearchPage from "./pages/PersonalizedSearchPage.jsx";
@@ -10,6 +11,7 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/profile" element={<Profile />} /> 
         <Route path="/jobs" element={<JobResults />} />
         <Route path="/personalized-search" element={<PersonalizedSearchPage />} />
         <Route path="/signin" element={<SignInPage />} />

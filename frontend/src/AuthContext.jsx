@@ -1,16 +1,30 @@
-// AuthContext.js
+// src/AuthContext.jsx
 import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // change on login/logout
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null); // holds all user info (id, email, prefs, etc.)
+
+  const login = (userData) => {
+    setUser(userData);
+  };
+
+  const logout = () => {
+    setUser(null);
+  };
+
+  const updateUser = (updatedFields) => {
+    setUser((prev) => ({ ...prev, ...updatedFields }));
+  };
+
+  const isLoggedIn = !!user;
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+    <AuthContext.Provider value={{ user, isLoggedIn, login, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
 export const useAuth = () => useContext(AuthContext);

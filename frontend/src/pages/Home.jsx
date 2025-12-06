@@ -1,33 +1,33 @@
 import Title from "../components/Title.jsx";
 import SearchBar from "../components/SearchBar.jsx";
-import SignIn from "../components/SignIn.jsx";
-import Resources from "../components/Resources.jsx";
+import ProfileButton from "../components/ProfileButton.jsx";
 import SignedInSearch from "../components/SignedInSearch.jsx";
-import { useAuth } from "../AuthContext.jsx"; // <-- import the hook
-import { useNavigate } from "react-router-dom"; // if you want to navigate
+import Resources from "../components/Resources.jsx";
+import { useAuth } from "../AuthContext.jsx";
+import { useNavigate } from "react-router-dom";
 import "../styles/App.css";
 
 export default function Home() {
-  const { isLoggedIn } = useAuth(); // get login status
-  const navigate = useNavigate(); // for navigation
-
-  const handleRecommendClick = () => {
-    navigate("/recommend"); // navigate to recommend jobs page
-  };
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
 
   return (
-    <div className="container">
-      <SignIn />
-      <Title />
-      <SearchBar />
-      <SignedInSearch />
+    <div className="container" style={{ position: "relative" }}>
+      {isLoggedIn && <ProfileButton />}
 
-      {/* Recommend Jobs button only shows when user is logged in */}
-      {isLoggedIn && (
-        <button onClick={handleRecommendClick} className="recommend-btn">
-          Recommend Jobs
+      {!isLoggedIn && (
+        <button
+          onClick={() => navigate("/signin")}
+          style={{ marginBottom: "10px" }}
+        >
+          Sign In / Create Account
         </button>
       )}
+
+      <Title />
+      <SearchBar />
+
+      {isLoggedIn && <SignedInSearch />}
 
       <Resources />
     </div>
