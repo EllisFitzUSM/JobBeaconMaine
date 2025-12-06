@@ -11,6 +11,9 @@ else
     echo "Virtual environment '$VENV_DIR' already exists."
 fi
 
+echo "Activating Virtual Environment..."
+source "$VENV_DIR/bin/activate"
+
 echo "Installing dependencies..."
 pip install -r requirements.txt
 
