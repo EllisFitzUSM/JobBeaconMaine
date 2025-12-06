@@ -1,15 +1,15 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../AuthContext.jsx";
 
 export default function SignedInSearch() {
+  const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    navigate("/personalized-search");
-  };
+  if (!isLoggedIn) return null;
 
   return (
-    <button 
-      onClick={handleClick} 
+    <button
+      onClick={() => navigate("/personalized-search")}
       style={{
         marginTop: "10px",
         padding: "10px 20px",
@@ -17,7 +17,7 @@ export default function SignedInSearch() {
         cursor: "pointer"
       }}
     >
-      Signed - In Search
+      Recommended Jobs
     </button>
   );
 }
