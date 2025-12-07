@@ -2,6 +2,33 @@ USE TEST;
 
 DELIMITER $$
 
+CREATE PROCEDURE read_job_employer(
+    IN p_job_id INT
+)
+BEGIN
+    SELECT *
+    FROM Jobs AS J
+    JOIN Employer AS E ON J.employer_id = E.employer_id
+    WHERE employer_id = p_employer_id;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE read_employer(
+    IN p_employer_id INT
+)
+BEGIN
+    SELECT *
+    FROM Employer
+    WHERE employer_id = p_employer_id;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
 CREATE PROCEDURE add_employer(
     IN p_employer_name VARCHAR(200),
     IN p_employer_culture VARCHAR(1000),
@@ -135,6 +162,19 @@ CREATE PROCEDURE delete_job(IN p_job_id INT)
 BEGIN
     DELETE FROM Jobs
     WHERE job_id = p_job_id;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE read_job_application(
+    IN p_job_app_id INT
+)
+BEGIN
+    SELECT *
+    FROM Job_Application
+    WHERE job_app_id = p_job_app_id;
 END $$
 
 DELIMITER ;

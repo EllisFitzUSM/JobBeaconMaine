@@ -8,7 +8,6 @@ class DataImporter:
         self.file = open(file_path, 'r')
         self.proc_name = proc_name
         self.df = pd.read_csv(file_path)
-        print(self.df.head())
 
     def insert_row(self, row, connection):
         with connection.cursor() as cursor:
