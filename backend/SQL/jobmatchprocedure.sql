@@ -5,179 +5,178 @@ Prompt for chatgpt 5.1
 I changed the match score for remote preferences so it compared with the user preferences.
 **/
 
+DROP PROCEDURE IF EXISTS jobMatchScore;
+
 DELIMITER $$
 
 CREATE PROCEDURE jobMatchScore(IN p_user_id INT)
 BEGIN
+/************************************************************
+* Load user preferences + location
+************************************************************/
+SELECT
+u.City,
+u.County,
+u.Zip_Code,
+sa.Remote_Pref,
+sa.Salary_Min_Pref,
+sa.Salary_Max_Pref
+INTO
+@u_city,
+@u_county,
+@u_zip,
+@u_remote_pref,
+@u_sal_min,
+@u_sal_max
+FROM user u
+JOIN STUDENT_ALUM sa ON sa.User_ID = u.User_ID
+WHERE u.User_ID = p_user_id;
 
-    /************************************************************
-     * Compute job match score as:
-     *
-     *   Skills Match (60 pts)
-     *   Location Match (20 pts)
-     *   Remote Preference Match (10 pts)
-     *   Salary Match (10 pts)
-     *
-     ************************************************************/
+-- Default salary preferences if missing
+IF @u_sal_min IS NULL THEN SET @u_sal_min = 0; END IF;
+IF @u_sal_max IS NULL THEN SET @u_sal_max = 999999; END IF;
 
-    -- Temporary table to hold results
-    DROP TEMPORARY TABLE IF EXISTS tmp_job_scores;
+/************************************************************
+ * Create temporary results table
+ ************************************************************/
+DROP TEMPORARY TABLE IF EXISTS tmp_job_scores;
 
-    CREATE TEMPORARY TABLE tmp_job_scores (
-        job_id INT,
-        job_title VARCHAR(255),
-        total_score DECIMAL(10,2),
-        skills_score DECIMAL(10,2),
-        location_score DECIMAL(10,2),
-        remote_score DECIMAL(10,2),
-        salary_score DECIMAL(10,2)
-    );
+CREATE TEMPORARY TABLE tmp_job_scores (
+    job_id INT,
+    job_title VARCHAR(255),
+    total_score DECIMAL(10,2),
+    skills_score DECIMAL(10,2),
+    location_score DECIMAL(10,2),
+    remote_score DECIMAL(10,2),
+    salary_score DECIMAL(10,2)
+);
 
-    /************************************************************
-     * Preload user data
-     ************************************************************/
-    SELECT City, County, Zip_Code
-    INTO @u_city, @u_county, @u_zip
-    FROM STUDENT_ALUM
-    WHERE User_ID = p_user_id;
+/************************************************************
+ * Insert job match scores
+ ************************************************************/
+INSERT INTO tmp_job_scores (
+    job_id, job_title, total_score,
+    skills_score, location_score, remote_score, salary_score
+)
+SELECT
+    j.job_id,
+    j.job_title,
 
-    -- If a user has salary preferences, load them:
-    SET @salary_pref_min = 0;
-    SET @salary_pref_max = 999999;
-
-    /************************************************************
-     * Insert each job with computed component scores
-     ************************************************************/
-    INSERT INTO tmp_job_scores (job_id, job_title, total_score,
-                                skills_score, location_score, remote_score, salary_score)
-    SELECT
-        j.Job_ID,
-        j.JobTitle,
-
-        -- TOTAL SCORE
-        (
-            -- Skills Score (60 pts)
-            (
-                (SELECT COUNT(*) 
-                 FROM REQUIRES_SKILL rs WHERE rs.idJOB = j.Job_ID)
-                > 0
-                /* % skills matched = user skills matching job skills */
-                * (
-                    SELECT 
-                        (COUNT(*) * 60.0) / 
-                        (SELECT COUNT(*) FROM REQUIRES_SKILL rs2 WHERE rs2.idJOB = j.Job_ID)
-                    FROM REQUIRES_SKILL rs
-                    INNER JOIN HAS_SKILL hs 
-                    ON hs.idSKILL = rs.idSKILL
-                    WHERE hs.idUSER = p_user_id
-                    AND rs.idJOB = j.Job_ID
-                )
-            )
-
-            +
-
-            -- Location Score (20 pts)
-            (
-                CASE
-                    WHEN j.City   = @u_city   THEN 20
-                    WHEN j.County = @u_county THEN 15
-                    WHEN j.Zip_Code = @u_zip  THEN 10
-                    ELSE 0
-                END
-            )
-
-            +
-            -- need to add comparison to actual preferences
-        SELECT Remote_Pref INTO @u_remote_pref
-            FROM STUDENT_ALUM
-            WHERE User_ID = p_user_id;
-            -- Remote Preference Score (10 pts)
-            (
-                CASE
-        -- Perfect match
-                WHEN j.Remote_Pref = @u_remote_pref THEN 10
-        
-                -- Compatible but not ideal
-                WHEN @u_remote_pref = 'Remote' AND j.Remote_Pref = 'Hybrid' THEN 6
-                WHEN @u_remote_pref = 'Hybrid' AND j.Remote_Pref IN ('Remote','Office') THEN 6
-                WHEN @u_remote_pref = 'Office' AND j.Remote_Pref = 'Hybrid' THEN 6
-        
-                -- Weak match
-                WHEN @u_remote_pref = 'Remote' AND j.Remote_Pref = 'Office' THEN 3
-                WHEN @u_remote_pref = 'Office' AND j.Remote_Pref = 'Remote' THEN 3
-        
-                ELSE 0
-            END
-        ) 
-
-            +
-
-            -- Salary Match Score (10 pts)
-            (
-                CASE 
-                    WHEN j.Salary_Max >= @salary_pref_min 
-                         AND j.Salary_Min <= @salary_pref_max THEN 10
-                    ELSE 4
-                END
-            )
-        ) AS total_score,
-
-        -- Individual Subscores
-        /* Skills score */
-        (
-            SELECT 
-                CASE 
-                    WHEN (SELECT COUNT(*) FROM REQUIRES_SKILL WHERE idJOB = j.Job_ID) = 0 THEN 0
-                    ELSE (
-                        (SELECT COUNT(*) 
-                         FROM REQUIRES_SKILL rs
-                         INNER JOIN HAS_SKILL hs 
-                         ON hs.idSKILL = rs.idSKILL
-                         WHERE hs.idUSER = p_user_id
-                         AND rs.idJOB = j.Job_ID
-                        ) * 60.0
-                    ) / (SELECT COUNT(*) FROM REQUIRES_SKILL WHERE idJOB = j.Job_ID)
-                END
-        ) AS skills_score,
-
-        /* Location */
+    /*************** TOTAL SCORE = skills + location + remote + salary ***************/
+    (
+        /* Skills Score (60 pts) */
         (
             CASE
-                WHEN j.City   = @u_city   THEN 20
-                WHEN j.County = @u_county THEN 15
-                WHEN j.Zip_Code = @u_zip  THEN 10
+                WHEN (SELECT COUNT(*) FROM REQUIRES_SKILL WHERE idJOB = j.job_id) = 0
+                    THEN 0
+                ELSE (
+                    (SELECT COUNT(*)
+                     FROM REQUIRES_SKILL rs
+                     INNER JOIN HAS_SKILL hs ON hs.idSKILL = rs.idSKILL
+                     WHERE rs.idJOB = j.job_id
+                     AND hs.idUSER = p_user_id
+                    ) * 60.0
+                ) / (SELECT COUNT(*) FROM REQUIRES_SKILL WHERE idJOB = j.job_id)
+            END
+        )
+
+        +
+
+        /* Location Score (20 pts) */
+        (
+            CASE
+                WHEN j.city = @u_city THEN 20
+                WHEN j.county = @u_county THEN 15
+                WHEN j.zip_code = @u_zip THEN 10
                 ELSE 0
             END
-        ) AS location_score,
+        )
 
-        /* Remote */
+        +
+
+        /* Remote Score (10 pts) */
         (
-            CASE 
-                WHEN j.Remote_Pref = 'Remote' THEN 10
-                WHEN j.Remote_Pref = 'Hybrid' THEN 7
-                WHEN j.Remote_Pref = 'Office' THEN 3
+            CASE
+                WHEN j.remote_pref = @u_remote_pref THEN 10
+                WHEN @u_remote_pref = 'Remote' AND j.remote_pref = 'Hybrid' THEN 6
+                WHEN @u_remote_pref = 'Hybrid' AND j.remote_pref IN ('Remote','Office') THEN 6
+                WHEN @u_remote_pref = 'Office' AND j.remote_pref = 'Hybrid' THEN 6
+                WHEN @u_remote_pref = 'Remote' AND j.remote_pref = 'Office' THEN 3
+                WHEN @u_remote_pref = 'Office' AND j.remote_pref = 'Remote' THEN 3
                 ELSE 0
             END
-        ) AS remote_score,
+        )
 
-        /* Salary */
+        +
+
+        /* Salary Score (10 pts) */
         (
-            CASE 
-                WHEN j.Salary_Max >= @salary_pref_min 
-                     AND j.Salary_Min <= @salary_pref_max THEN 10
+            CASE
+                WHEN j.salary_max >= @u_sal_min 
+                 AND j.salary_min <= @u_sal_max THEN 10
                 ELSE 4
             END
-        ) AS salary_score
+        )
+    ) AS total_score,
 
-    FROM JOB j
-    WHERE j.Is_Expired = 0;   -- Only active jobs
+    /*************** Subscores ***************/
+    /* Skills */
+    (
+        CASE
+            WHEN (SELECT COUNT(*) FROM REQUIRES_SKILL WHERE idJOB = j.job_id) = 0 THEN 0
+            ELSE (
+                (SELECT COUNT(*)
+                 FROM REQUIRES_SKILL rs
+                 INNER JOIN HAS_SKILL hs ON hs.idSKILL = rs.idSKILL
+                 WHERE rs.idJOB = j.job_id
+                 AND hs.idUSER = p_user_id
+                ) * 60.0
+            ) / (SELECT COUNT(*) FROM REQUIRES_SKILL WHERE idJOB = j.job_id)
+        END
+    ) AS skills_score,
 
-    /************************************************************
-     * Return sorted result set
-     ************************************************************/
-    SELECT *
-    FROM tmp_job_scores
-    ORDER BY total_score DESC;
+    /* Location */
+    (
+        CASE
+            WHEN j.city = @u_city THEN 20
+            WHEN j.county = @u_county THEN 15
+            WHEN j.zip_code = @u_zip THEN 10
+            ELSE 0
+        END
+    ) AS location_score,
+
+    /* Remote */
+    (
+        CASE
+            WHEN j.remote_pref = @u_remote_pref THEN 10
+            WHEN @u_remote_pref = 'Remote' AND j.remote_pref = 'Hybrid' THEN 6
+            WHEN @u_remote_pref = 'Hybrid' AND j.remote_pref IN ('Remote','Office') THEN 6
+            WHEN @u_remote_pref = 'Office' AND j.remote_pref = 'Hybrid' THEN 6
+            WHEN @u_remote_pref = 'Remote' AND j.remote_pref = 'Office' THEN 3
+            WHEN @u_remote_pref = 'Office' AND j.remote_pref = 'Remote' THEN 3
+            ELSE 0
+        END
+    ) AS remote_score,
+
+    /* Salary */
+    (
+        CASE
+            WHEN j.salary_max >= @u_sal_min 
+             AND j.salary_min <= @u_sal_max THEN 10
+            ELSE 4
+        END
+    ) AS salary_score
+
+FROM jobs j
+WHERE j.is_expired = 0;
+
+/************************************************************
+ * Return results sorted by score
+ ************************************************************/
+SELECT *
+FROM tmp_job_scores
+ORDER BY total_score DESC;
+
 
 END $$
 
