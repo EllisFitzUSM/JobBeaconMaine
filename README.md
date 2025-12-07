@@ -18,7 +18,7 @@ cd JobBeaconMaine
 
 Unix based machines (Linux, Mac)
 ```
-bash ./install
+source ./install.sh
 ```
 Windows
 ```
@@ -30,7 +30,7 @@ install.bat
 
 Unix based machines (Linux, Mac)
 ```
-bash ./run
+bash ./run.sh
 ```
 Windows
 ```
@@ -38,7 +38,7 @@ run.bat
 ```
 
 ### Debugging
-For both the run script you can append additional arguments if your database root and password differ from the default.
+For the run script you can append additional arguments if your database root and password differ from the default.
 ```
 --d [<user>] [<password>]
 ```
