@@ -13,5 +13,8 @@ IF NOT EXIST "%VENV_DIR%" (
 
 CALL "%VENV_DIR%\Scripts\activate.bat"
 
-echo Installing Dependencies
+echo Installing Python Libraries
 pip install -r requirements.txt
+
+@echo Installing Node Modules
+npm --prefix frontend/ install
