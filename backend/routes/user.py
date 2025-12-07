@@ -3,9 +3,20 @@ import pymysql.cursors
 
 user_routes = Blueprint('user_routes', __name__)
 
+def open_connection():
+    return pymysql.connect(
+        host='localhost',
+        user='admin',
+        password='admin',
+        database='job_beacon_maine',
+        port=3306,
+        charset='utf8mb4',
+        cursorclass=pymysql.cursors.DictCursor
+    )
+
 @user_routes.route('/user/<int:user_id>', methods=['GET', 'PUT'])
 def user_profile(user_id):
-    conn = get_db_connection()
+    conn = open_connection()
     cursor = conn.cursor()
 
     if request.method == 'GET':
@@ -16,7 +27,7 @@ def user_profile(user_id):
         conn.close()
         return jsonify(result[0]) if result else jsonify({})
 
-    elif request.method == 'PUT':
+    if request.method == 'PUT':
         data = request.json
 
         cursor.callproc('UpdateUser', [
@@ -46,4 +57,5 @@ def user_profile(user_id):
 
         cursor.close()
         conn.close()
+
         return jsonify({'message': 'Profile updated successfully'})
