@@ -4,7 +4,7 @@ echo Building Database
 
 REM For some reason an if/else would double execute. 
 IF "%~1"=="--d" (
-    echo Using specific arguments user %~2 and password %~3
+    echo Building Database Using Specific Arguments User: %~2, Password: %~3
     python backend\createdb.py --user %~2 --pw %~3 --import_data --index
 
     @echo Running Flask App
@@ -12,7 +12,7 @@ IF "%~1"=="--d" (
     goto :frontend
 )
 
-echo Using defaults (admin, admin)
+echo Building Database Using Defaults (admin, admin)
 python backend\createdb.py --import_data --index
 
 @echo Running Flask App
