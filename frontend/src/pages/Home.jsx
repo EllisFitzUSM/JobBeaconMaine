@@ -8,13 +8,41 @@ import { useNavigate } from "react-router-dom";
 import "../styles/App.css";
 
 export default function Home() {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/"); // refresh home after signout
+  };
 
   return (
     <div className="container" style={{ position: "relative" }}>
+      
+      {/* Show Profile Button when logged in */}
       {isLoggedIn && <ProfileButton />}
 
+      {/* Show Sign Out button when logged in */}
+      {isLoggedIn && (
+        <button
+          onClick={handleLogout}
+          style={{
+            position: "absolute",
+            top: "20px",
+            right: "20px",
+            padding: "8px 14px",
+            background: "red",
+            color: "white",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer",
+          }}
+        >
+          Sign Out
+        </button>
+      )}
+
+      {/* Show Sign In button only when logged out */}
       {!isLoggedIn && (
         <button
           onClick={() => navigate("/signin")}
@@ -24,11 +52,10 @@ export default function Home() {
         </button>
       )}
 
+      {/* Your page content */}
       <Title />
       <SearchBar />
-
       {isLoggedIn && <SignedInSearch />}
-
       <Resources />
     </div>
   );

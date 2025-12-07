@@ -8,7 +8,7 @@ def main():
     import sys
     print("ARGV:", sys.argv)
 
-    argparser = ap.ArgumentParser(description='Build the Job Beacon Maine backend/database')
+    argparser = ap.ArgumentParser(description='Build the Job Beacon Maine Database')
     argparser.add_argument('--host', type=str, default='localhost', help='Database host')
     argparser.add_argument('--user', type=str, default='admin', help='Database user')
     argparser.add_argument('--pw', type=str, default='admin', help='Database password')

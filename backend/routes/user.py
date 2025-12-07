@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 import pymysql.cursors
+from db_connection import get_db_connection
 
 user_routes = Blueprint('user_routes', __name__)
 
