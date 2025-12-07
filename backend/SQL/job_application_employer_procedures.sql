@@ -1,21 +1,26 @@
 USE TEST;
 
+-------------------------------------------------------------
+-- FIXED: Read job with employer (you forgot p_employer_id)
+-------------------------------------------------------------
 DELIMITER $$
-
 CREATE PROCEDURE read_job_employer(
-    IN p_job_id INT
+    IN p_job_id INT,
+    IN p_employer_id INT
 )
 BEGIN
     SELECT *
     FROM Jobs AS J
     JOIN Employer AS E ON J.employer_id = E.employer_id
-    WHERE employer_id = p_employer_id;
+    WHERE J.job_id = p_job_id
+      AND E.employer_id = p_employer_id;
 END $$
-
 DELIMITER ;
 
+-------------------------------------------------------------
+-- READ Employer
+-------------------------------------------------------------
 DELIMITER $$
-
 CREATE PROCEDURE read_employer(
     IN p_employer_id INT
 )
@@ -24,11 +29,12 @@ BEGIN
     FROM Employer
     WHERE employer_id = p_employer_id;
 END $$
-
 DELIMITER ;
 
+-------------------------------------------------------------
+-- ADD Employer
+-------------------------------------------------------------
 DELIMITER $$
-
 CREATE PROCEDURE add_employer(
     IN p_employer_name VARCHAR(200),
     IN p_employer_culture VARCHAR(1000),
@@ -39,11 +45,12 @@ BEGIN
     INSERT INTO Employer (employer_name, employer_culture, employer_website, employer_industry)
     VALUES (p_employer_name, p_employer_culture, p_employer_website, p_employer_industry);
 END $$
-
 DELIMITER ;
 
+-------------------------------------------------------------
+-- UPDATE Employer
+-------------------------------------------------------------
 DELIMITER $$
-
 CREATE PROCEDURE update_employer(
     IN p_employer_id INT,
     IN p_employer_name VARCHAR(200),
@@ -60,22 +67,23 @@ BEGIN
         employer_industry = p_employer_industry
     WHERE employer_id = p_employer_id;
 END $$
-
 DELIMITER ;
 
+-------------------------------------------------------------
+-- DELETE Employer
+-------------------------------------------------------------
 DELIMITER $$
-
 CREATE PROCEDURE delete_employer(IN p_employer_id INT)
 BEGIN
     DELETE FROM Employer
     WHERE employer_id = p_employer_id;
 END $$
-
 DELIMITER ;
 
-
+-------------------------------------------------------------
+-- ADD Job
+-------------------------------------------------------------
 DELIMITER $$
-
 CREATE PROCEDURE add_job(
     IN p_employer_id INT,
     IN p_recruiter_id INT,
@@ -106,12 +114,12 @@ BEGIN
         p_posted_at, p_expires_at, p_estimated_start_date, p_is_expired
     );
 END $$
-
 DELIMITER ;
 
-
+-------------------------------------------------------------
+-- UPDATE Job
+-------------------------------------------------------------
 DELIMITER $$
-
 CREATE PROCEDURE update_job(
     IN p_job_id INT,
     IN p_employer_id INT,
@@ -152,22 +160,23 @@ BEGIN
         is_expired = p_is_expired
     WHERE job_id = p_job_id;
 END $$
-
 DELIMITER ;
 
-
+-------------------------------------------------------------
+-- DELETE Job
+-------------------------------------------------------------
 DELIMITER $$
-
 CREATE PROCEDURE delete_job(IN p_job_id INT)
 BEGIN
     DELETE FROM Jobs
     WHERE job_id = p_job_id;
 END $$
-
 DELIMITER ;
 
+-------------------------------------------------------------
+-- READ Job Application
+-------------------------------------------------------------
 DELIMITER $$
-
 CREATE PROCEDURE read_job_application(
     IN p_job_app_id INT
 )
@@ -176,12 +185,12 @@ BEGIN
     FROM Job_Application
     WHERE job_app_id = p_job_app_id;
 END $$
-
 DELIMITER ;
 
-
+-------------------------------------------------------------
+-- ADD Job Application
+-------------------------------------------------------------
 DELIMITER $$
-
 CREATE PROCEDURE add_job_application(
     IN p_job_id INT,
     IN p_user_id INT,
@@ -192,12 +201,12 @@ BEGIN
     INSERT INTO Job_Application (job_id, user_id, referred_by, status)
     VALUES (p_job_id, p_user_id, p_referred_by, p_status);
 END $$
-
 DELIMITER ;
 
-
+-------------------------------------------------------------
+-- UPDATE Job Application
+-------------------------------------------------------------
 DELIMITER $$
-
 CREATE PROCEDURE update_job_application(
     IN p_job_id INT,
     IN p_user_id INT,
@@ -212,12 +221,12 @@ BEGIN
     WHERE job_id = p_job_id
       AND user_id = p_user_id;
 END $$
-
 DELIMITER ;
 
-
+-------------------------------------------------------------
+-- DELETE Job Application
+-------------------------------------------------------------
 DELIMITER $$
-
 CREATE PROCEDURE delete_job_application(
     IN p_job_id INT,
     IN p_user_id INT
@@ -227,5 +236,53 @@ BEGIN
     WHERE job_id = p_job_id
       AND user_id = p_user_id;
 END $$
+DELIMITER ;
 
+-------------------------------------------------------------
+-- **** NEW: GET PROCEDURES YOU WERE MISSING ****
+-------------------------------------------------------------
+
+-----------------------------
+-- GET ALL JOBS
+-----------------------------
+DELIMITER $$
+CREATE PROCEDURE get_jobs()
+BEGIN
+    SELECT *
+    FROM Jobs;
+END $$
+DELIMITER ;
+
+-----------------------------
+-- GET JOB BY ID
+-----------------------------
+DELIMITER $$
+CREATE PROCEDURE get_job_by_id(IN p_job_id INT)
+BEGIN
+    SELECT *
+    FROM Jobs
+    WHERE job_id = p_job_id;
+END $$
+DELIMITER ;
+
+-----------------------------
+-- GET ALL EMPLOYERS
+-----------------------------
+DELIMITER $$
+CREATE PROCEDURE get_all_employers()
+BEGIN
+    SELECT *
+    FROM Employer;
+END $$
+DELIMITER ;
+
+-----------------------------
+-- GET ALL JOB APPLICATIONS
+-----------------------------
+DELIMITER $$
+CREATE PROCEDURE get_all_job_applications()
+BEGIN
+    SELECT *
+    FROM Job_Application;
+END $$
 DELIMITER ;
