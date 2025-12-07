@@ -6,29 +6,41 @@ Students and new graduates struggle to discover relevant job opportunities in Ma
 |------------|------------|-----------|-----------|
 |   Email  | ellis.fitzgerald@maine.edu   | jered.kalombo@maine.edu | kadin.ilott@maine.edu  |
 
-## Build
 
-**Clone repository and change directory**
+## Clone repository and change directory
 ```
 git clone https://github.com/EllisFitzUSM/JobBeaconMaine.git
 cd JobBeaconMaine
 ```
 
-**Install requirements & dependencies.**
+## Install
+>**WARNING:** Jupyter notebook requirements *will not be* installed. Though, these are not necessary to run the application.
 
-For Unix based machines (Linux, Mac)
+>**WARNING:** Running the **install** script with no arguments will assume a root user "admin" with password "admin." See [debug](#debug) if your configurations differ.
+
+Unix based machines (Linux, Mac)
 ```
 bash ./install
 ```
-For Windows (WIP)
+Windows
 ```
 install.bat
 ```
 
-**WARNING: Jupyter notebook requirements are not satisified. Though, these are not involved in the building or run process.**
+## Run
+>**WARNING:** Running the **run** script with no arguments will assume a root user "admin" with password "admin." See [debug](#debug) if your configurations differ.
 
-Default will run with port 3306 and put in admin for user and password.
-Optionally, you can provide arguments for debugging:
+Unix based machines (Linux, Mac)
+```
+bash ./run
+```
+Windows
+```
+run.bat
+```
+
+## Debug
+For both the install and run scripts you can append additional arguments if your database root and password differ from the default.
 ```
 --d [<user>] [<password>]
 ```
