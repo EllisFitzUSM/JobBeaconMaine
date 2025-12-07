@@ -16,8 +16,6 @@ cd JobBeaconMaine
 ## Install
 >**WARNING:** Jupyter notebook requirements *will not be* installed. Though, these are not necessary to run the application.
 
->**WARNING:** Running the **install** script with no arguments will assume a root user "admin" with password "admin." See [debug](#debug) if your configurations differ.
-
 Unix based machines (Linux, Mac)
 ```
 bash ./install
@@ -28,7 +26,7 @@ install.bat
 ```
 
 ## Run
->**WARNING:** Running the **run** script with no arguments will assume a root user "admin" with password "admin." See [debug](#debug) if your configurations differ.
+>**WARNING:** Running the **run** script with no arguments will assume a root user "admin" with password "admin." See [debugging](#debugging) if your configurations differ.
 
 Unix based machines (Linux, Mac)
 ```
@@ -39,8 +37,8 @@ Windows
 run.bat
 ```
 
-## Debug
-For both the install and run scripts you can append additional arguments if your database root and password differ from the default.
+### Debugging
+For both the run script you can append additional arguments if your database root and password differ from the default.
 ```
 --d [<user>] [<password>]
 ```
