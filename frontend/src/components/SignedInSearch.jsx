@@ -9,7 +9,7 @@ export default function SignedInSearch() {
 
   return (
     <button
-      onClick={() => navigate("/personalized-search")}
+      onClick={() => navigate("/jobs?recommended=true")}
       style={{
         marginTop: "10px",
         padding: "10px 20px",
