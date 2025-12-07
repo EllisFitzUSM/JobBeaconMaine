@@ -14,10 +14,12 @@ DROP TABLE IF EXISTS USER;
 -- Stores basic information for all users (students and recruiters)
 CREATE TABLE USER (
   User_ID INT NOT NULL AUTO_INCREMENT,
+  Username VARCHAR(50) NOT NULL UNIQUE, 
   First_Name VARCHAR(50) NOT NULL,
   Last_Name VARCHAR(50) NOT NULL,
   Middle_Initial CHAR(1) DEFAULT NULL,
-  Email VARCHAR(100) NOT NULL,
+  Email VARCHAR(100) NOT NULL UNIQUE,
+  Password_Hash VARCHAR(255) NOT NULL,
   Phone VARCHAR(15) DEFAULT NULL,
   City VARCHAR(50) DEFAULT NULL,
   County VARCHAR(50) NOT NULL,
