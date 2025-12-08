@@ -1,7 +1,7 @@
 export default function Resources() {
   return (
-    <a href="#" className="bottom-right">
+    <button className="btn btn-solid-green resources-btn">
       Resources
-    </a>
+    </button>
   );
 }

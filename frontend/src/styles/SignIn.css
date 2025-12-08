@@ -1,0 +1,108 @@
+/* ---------- AUTH BACKGROUND ---------- */
+
+.auth-bg {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+/* ---------- CARD ---------- */
+
+.auth-card {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  padding: 40px 50px;
+  border-radius: 16px;
+  width: 850px;               /* << WIDER CARD */
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.auth-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 25px;
+  color: #000;
+}
+
+.auth-error {
+  text-align: center;
+  color: red;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+/* ---------- FORM ---------- */
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;                  /* << SPACE BETWEEN TOP FIELDS */
+}
+
+/* INPUT STYLING */
+.auth-form label {
+  font-weight: 600;
+  color: #000;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #000;
+  background: white;
+}
+
+/* ---------- SIGNUP GRID ---------- */
+
+.signup-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 32px;             /* << MUCH MORE ROOM horizontally + vertically */
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.signup-grid .grid-full {
+  grid-column: span 2;
+}
+
+/* ---------- SUBMIT BUTTON ---------- */
+
+.auth-btn {
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  padding: 14px 20px;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.auth-btn:hover {
+  background: #1f8a4a;
+}
+
+/* ---------- MODE SWITCH ---------- */
+
+.auth-switch {
+  text-align: center;
+  margin-top: 18px;
+  color: black;
+}
+
+.auth-switch span {
+  color: #c0392b;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-switch span:hover {
+  text-decoration: underline;
+}

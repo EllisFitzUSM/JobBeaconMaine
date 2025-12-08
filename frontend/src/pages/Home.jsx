@@ -13,50 +13,93 @@ export default function Home() {
 
   const handleLogout = () => {
     logout();
-    navigate("/"); // refresh home after signout
+    navigate("/");
   };
 
   return (
-    <div className="container" style={{ position: "relative" }}>
+    <div className="home">
       
-      {/* Show Profile Button when logged in */}
-      {isLoggedIn && <ProfileButton />}
+      {/* ===== HEADER ===== */}
+      <div className="home-header">
 
-      {/* Show Sign Out button when logged in */}
-      {isLoggedIn && (
-        <button
-          onClick={handleLogout}
-          style={{
-            position: "absolute",
-            top: "20px",
-            right: "20px",
-            padding: "8px 14px",
-            background: "red",
-            color: "white",
-            border: "none",
-            borderRadius: "6px",
-            cursor: "pointer",
-          }}
-        >
-          Sign Out
-        </button>
-      )}
+        {/* Logo (top-left) */}
+        <img
+          src="/assets/T_Circle.png"
+          className="header-logo"
+          alt="Logo"
+          onClick={() => navigate("/")}
+          style={{ cursor: "pointer" }}
+        />
 
-      {/* Show Sign In button only when logged out */}
-      {!isLoggedIn && (
-        <button
-          onClick={() => navigate("/signin")}
-          style={{ marginBottom: "10px" }}
-        >
-          Sign In / Create Account
-        </button>
-      )}
+        {/* Right side */}
+        <div className="header-right">
 
-      {/* Your page content */}
-      <Title />
-      <SearchBar />
-      {isLoggedIn && <SignedInSearch />}
-      <Resources />
+          {isLoggedIn ? (
+            <>
+              {/* Profile button should appear here */}
+              <div className="header-profile-wrapper">
+                <ProfileButton />
+              </div>
+
+              {/* Sign Out */}
+              <button
+                onClick={handleLogout}
+                className="btn btn-solid-red"
+              >
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => navigate("/signin")}
+              className="btn btn-outline-red"
+            >
+              Sign In / Create Account
+            </button>
+          )}
+
+        </div>
+      </div>
+
+      {/* ===== MAIN CONTENT ===== */}
+      <main className="home-main">
+
+        {/* Search hero section */}
+        <section className="hero-section">
+          <Title />
+          <p className="hero-subtitle">
+            One search for jobs across Maine. Filter, match, and discover roles
+            tailored for students & alumni.
+          </p>
+
+          <div className="hero-search">
+            <SearchBar />
+
+            {isLoggedIn && (
+              <div className="hero-recommend">
+                <SignedInSearch />
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Resources band */}
+        <section className="resources-band">
+          <img src="/assets/T_CircleTransparent.png"
+               alt="decor"
+               className="band-circle band-circle-left" />
+
+          <img src="/assets/T_CircleTransparent.png"
+               alt="decor"
+               className="band-circle band-circle-right" />
+
+          <div className="resources-inner">
+            <Resources />
+          </div>
+        </section>
+
+      </main>
+
     </div>
   );
 }
