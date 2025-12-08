@@ -41,10 +41,10 @@ export default function JobResults() {
 
   const fetchCities = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/jobs/filters/cities");
+      const res = await fetch("http://localhost:5000/api/geo/cities");
       const data = await res.json();
       if (data.success) setCities(data.cities);
-    } catch (err) {
+    } catch (err) {ß
       console.error("Error fetching cities:", err);
     }
   };

@@ -5,6 +5,8 @@ from routes.jobs_routes import jobs_routes  # Import the new jobs routes
 from routes.user import user_routes
 from routes.signup import signup_routes
 from routes.login_routes import login_routes
+from routes.skills import skill_routes
+from routes.geo import geo_routes
 import argparse as ap
 import pymysql.cursors
 
@@ -15,16 +17,16 @@ def main():
     argparser.add_argument('--pw', type=str, default='admin', help='Database password')
     argparser.add_argument('--port', type=int, default=3306, help='Database port')
     args = argparser.parse_args()
-    connection = pymysql.connect(host=args.host,
-                                port=args.port,
-                                user=args.user,
-                                password=args.pw,
-                                charset='utf8mb4',
-                                database='job_beacon_maine',
-                                cursorclass=pymysql.cursors.DictCursor,
-                                client_flag=pymysql.constants.CLIENT.MULTI_STATEMENTS
-                                )
-    set_db_connection(connection)
+    # connection = pymysql.connect(host=args.host,
+    #                             port=args.port,
+    #                             user=args.user,
+    #                             password=args.pw,
+    #                             charset='utf8mb4',
+    #                             database='job_beacon_maine',
+    #                             cursorclass=pymysql.cursors.DictCursor,
+    #                             client_flag=pymysql.constants.CLIENT.MULTI_STATEMENTS
+    #                             )
+    set_db_config({'host': args.host, 'user': args.user, 'password': args.pw})
     app.run(debug=True, port=5000)
 
 app = Flask(__name__)
@@ -37,6 +39,8 @@ app.register_blueprint(user_routes)
 app.register_blueprint(jobs_routes)
 app.register_blueprint(signup_routes)
 app.register_blueprint(login_routes)
+app.register_blueprint(skill_routes)
+app.register_blueprint(geo_routes)
 
 
 @app.route("/")
