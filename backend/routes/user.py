@@ -13,7 +13,8 @@ def open_connection():
         database='job_beacon_maine',
         port=3306,
         charset='utf8mb4',
-        cursorclass=pymysql.cursors.DictCursor
+        cursorclass=pymysql.cursors.DictCursor,
+        autocommit=False  # transaction management
     )
 
 @user_routes.route('/user/<int:user_id>', methods=['GET', 'PUT'])
@@ -25,19 +26,14 @@ def user_profile(user_id):
         if request.method == 'GET':
             cursor.callproc('GetUserProfile', [user_id])
             result = cursor.fetchall()
-
             if not result:
                 return jsonify({'error': 'User not found'}), 404
-
             return jsonify(result[0])
 
-        elif request.method == 'PUT':
+        if request.method == 'PUT':
             data = request.json or {}
 
-            # Start a transaction
-            cursor.execute('START TRANSACTION;')
-
-            # Update main user info
+            # Start transaction
             cursor.callproc('UpdateUser', [
                 user_id,
                 data.get('firstName'),
@@ -50,10 +46,9 @@ def user_profile(user_id):
                 data.get('zip')
             ])
 
-            # Update student/alumni-specific info
             cursor.callproc('UpdateStudentAlum', [
                 user_id,
-                data.get('distance'),
+                data.get('maxCommute'),
                 data.get('remotePref'),
                 data.get('culturePref'),
                 data.get('salaryMin'),
@@ -62,13 +57,13 @@ def user_profile(user_id):
                 None
             ])
 
-            # Commit transaction if all succeeds
+            # Commits only if both succeed
             conn.commit()
 
             return jsonify({'message': 'Profile updated successfully'})
 
     except Exception as e:
-        # Rollback if anything goes wrong
+        # Rollback in case of any error
         conn.rollback()
         return jsonify({'error': str(e)}), 500
 
