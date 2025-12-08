@@ -7,31 +7,26 @@ jobs_routes = Blueprint("jobs_routes", __name__)
 # -----------------------------------------------------------
 # MODE 1: Keyword Search (simple)
 # -----------------------------------------------------------
-@jobs_routes.route("/api/jobs/search", methods=["GET"])
+@jobs_routes.get("/api/jobs/search")
 def search_jobs():
+    keyword = request.args.get("keyword", "")
+
+    conn = get_db_connection()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+
     try:
-        keyword = request.args.get("keyword", "")
+        like = f"%{keyword}%"
 
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-
-        query = """
-            SELECT j.job_id, j.job_title, j.job_description, j.city, j.remote_pref,
-                   j.salary_min, j.salary_max,
-                   e.employer_name
+        cursor.execute("""
+            SELECT j.*, e.employer_name, e.employer_website 
             FROM Jobs j
             LEFT JOIN Employer e ON j.employer_id = e.employer_id
             WHERE j.job_title LIKE %s
                OR j.job_description LIKE %s
                OR e.employer_name LIKE %s
-        """
+        """, (like, like, like))
 
-        kw = f"%{keyword}%"
-        cursor.execute(query, (kw, kw, kw))
         jobs = cursor.fetchall()
-
-        cursor.close()
-        conn.close()
 
         return jsonify({"success": True, "jobs": jobs})
 
