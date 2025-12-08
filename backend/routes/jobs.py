@@ -16,14 +16,16 @@ def search_jobs():
         cursor = conn.cursor(dictionary=True)
 
         query = """
-            SELECT j.*, e.employer_name, e.employer_industry
+            SELECT j.job_id, j.job_title, j.job_description, j.city, j.remote_pref,
+                   j.salary_min, j.salary_max,
+                   e.employer_name
             FROM Jobs j
             LEFT JOIN Employer e ON j.employer_id = e.employer_id
             WHERE j.job_title LIKE %s
                OR j.job_description LIKE %s
                OR e.employer_name LIKE %s
         """
-        
+
         kw = f"%{keyword}%"
         cursor.execute(query, (kw, kw, kw))
         jobs = cursor.fetchall()
@@ -31,11 +33,11 @@ def search_jobs():
         cursor.close()
         conn.close()
 
-        return jsonify({"success": True, "jobs": jobs}), 200
+        return jsonify({"success": True, "jobs": jobs})
 
     except Exception as e:
-        traceback.print_exc()
         return jsonify({"success": False, "error": str(e)}), 500
+
 
 
 # -----------------------------------------------------------

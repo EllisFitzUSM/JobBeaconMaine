@@ -4,6 +4,7 @@ from flask_cors import CORS
 from routes.jobs import jobs_routes  # Import the new jobs routes
 from routes.user import user_routes
 from routes.signup import signup_routes
+from routes.login_routes import login_routes
 import argparse as ap
 import pymysql.cursors
 
@@ -35,6 +36,7 @@ CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
 app.register_blueprint(user_routes)
 app.register_blueprint(jobs_routes)
 app.register_blueprint(signup_routes)
+app.register_blueprint(login_routes)
 
 
 @app.route("/")

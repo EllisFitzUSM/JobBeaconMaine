@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext.jsx";
 
 export default function SignInPage() {
-  const [mode, setMode] = useState("signup"); // "signup" or "signin"
+  const [mode, setMode] = useState("signup"); 
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -39,9 +39,9 @@ export default function SignInPage() {
     setError("");
 
     try {
-      // =====================================================================
-      // SIGN UP MODE
-      // =====================================================================
+      // ==========================================================
+      // SIGNUP
+      // ==========================================================
       if (mode === "signup") {
         const res = await fetch("http://127.0.0.1:5000/api/signup", {
           method: "POST",
@@ -52,7 +52,7 @@ export default function SignInPage() {
         const data = await res.json();
 
         if (!res.ok) {
-          setError(data.error || data.message || "Signup failed.");
+          setError(data.error || "Signup failed.");
           return;
         }
 
@@ -61,19 +61,26 @@ export default function SignInPage() {
         return;
       }
 
-      // =====================================================================
-      // SIGN IN MODE (temporary behavior)
-      // =====================================================================
+      // ==========================================================
+      // SIGNIN
+      // ==========================================================
       if (mode === "signin") {
-        // For now just simulate login
-        login(formData);
+        const result = await login(formData.username, formData.password);
+
+        if (!result.success) {
+          setError(result.message || "Invalid username or password.");
+          return;
+        }
+
         navigate("/");
+        return;
       }
 
     } catch (err) {
       setError("Server error: " + err.message);
     }
-  };
+  }; 
+  // <-- this closes handleSubmit PROPERLY, fixing the bouncing issue
 
   // --------------------------------------------------------------
   // UI
@@ -82,7 +89,7 @@ export default function SignInPage() {
     <div style={{ textAlign: "center", marginTop: "40px" }}>
       <h1>{mode === "signup" ? "Create an Account" : "Sign In"}</h1>
 
-      {/* Toggle button */}
+      {/* Toggle Mode */}
       <button
         style={{ marginBottom: "20px" }}
         onClick={() => setMode(mode === "signup" ? "signin" : "signup")}
@@ -96,7 +103,7 @@ export default function SignInPage() {
 
       <form onSubmit={handleSubmit} style={{ display: "inline-block", textAlign: "left" }}>
         
-        {/* Username */}
+        {/* USERNAME */}
         <div>
           <label>Username:</label><br />
           <input
@@ -107,7 +114,7 @@ export default function SignInPage() {
           />
         </div>
 
-        {/* Password */}
+        {/* PASSWORD */}
         <div>
           <label>Password:</label><br />
           <input
@@ -119,127 +126,72 @@ export default function SignInPage() {
           />
         </div>
 
-        {/* ==========================================================
-            SIGNUP-ONLY FIELDS
-           ========================================================== */}
+        {/* SIGNUP ONLY FIELDS */}
         {mode === "signup" && (
           <>
             <div>
               <label>First Name:</label><br />
-              <input
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-              />
+              <input name="firstName" value={formData.firstName} onChange={handleChange} />
             </div>
 
             <div>
               <label>Last Name:</label><br />
-              <input
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-              />
+              <input name="lastName" value={formData.lastName} onChange={handleChange} />
             </div>
 
             <div>
               <label>Middle Initial:</label><br />
-              <input
-                name="middleInitial"
-                value={formData.middleInitial}
-                onChange={handleChange}
-              />
+              <input name="middleInitial" value={formData.middleInitial} onChange={handleChange} />
             </div>
 
             <div>
               <label>Email:</label><br />
-              <input
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-              />
+              <input name="email" type="email" value={formData.email} onChange={handleChange} />
             </div>
 
             <div>
               <label>Phone:</label><br />
-              <input
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-              />
+              <input name="phone" value={formData.phone} onChange={handleChange} />
             </div>
 
             <div>
               <label>City:</label><br />
-              <input
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
-              />
+              <input name="city" value={formData.city} onChange={handleChange} />
             </div>
 
             <div>
               <label>County:</label><br />
-              <input
-                name="county"
-                value={formData.county}
-                onChange={handleChange}
-              />
+              <input name="county" value={formData.county} onChange={handleChange} />
             </div>
 
             <div>
               <label>Zip Code:</label><br />
-              <input
-                name="zip"
-                value={formData.zip}
-                onChange={handleChange}
-              />
+              <input name="zip" value={formData.zip} onChange={handleChange} />
             </div>
 
             <div>
-              <label>Max Commute (miles):</label><br />
-              <input
-                name="maxCommute"
-                value={formData.maxCommute}
-                onChange={handleChange}
-              />
+              <label>Max Commute:</label><br />
+              <input name="maxCommute" value={formData.maxCommute} onChange={handleChange} />
             </div>
 
             <div>
               <label>Remote Preference:</label><br />
-              <input
-                name="remotePref"
-                value={formData.remotePref}
-                onChange={handleChange}
-              />
+              <input name="remotePref" value={formData.remotePref} onChange={handleChange} />
             </div>
 
             <div>
-              <label>Salary Minimum:</label><br />
-              <input
-                name="salaryMin"
-                value={formData.salaryMin}
-                onChange={handleChange}
-              />
+              <label>Salary Min:</label><br />
+              <input name="salaryMin" value={formData.salaryMin} onChange={handleChange} />
             </div>
 
             <div>
-              <label>Salary Maximum:</label><br />
-              <input
-                name="salaryMax"
-                value={formData.salaryMax}
-                onChange={handleChange}
-              />
+              <label>Salary Max:</label><br />
+              <input name="salaryMax" value={formData.salaryMax} onChange={handleChange} />
             </div>
 
             <div>
               <label>Skills:</label><br />
-              <input
-                name="skills"
-                value={formData.skills}
-                onChange={handleChange}
-              />
+              <input name="skills" value={formData.skills} onChange={handleChange} />
             </div>
           </>
         )}
