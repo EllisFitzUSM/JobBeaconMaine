@@ -1,8 +1,7 @@
 USE TEST;
 
-/*-------------------------------------------------------------
--- FIXED: Read job with employer (you forgot p_employer_id)
--------------------------------------------------------------*/
+-- Read job with employer 
+
 DELIMITER $$
 CREATE PROCEDURE read_job_employer(
     IN p_job_id INT,
@@ -17,9 +16,9 @@ BEGIN
 END $$
 DELIMITER ;
 
-/*-------------------------------------------------------------
+
 -- READ Employer
--------------------------------------------------------------*/
+
 DELIMITER $$
 CREATE PROCEDURE read_employer(
     IN p_employer_id INT
@@ -31,9 +30,9 @@ BEGIN
 END $$
 DELIMITER ;
 
-/*-------------------------------------------------------------
+
 -- ADD Employer
--------------------------------------------------------------*/
+
 DELIMITER $$
 CREATE PROCEDURE add_employer(
     IN p_employer_name VARCHAR(200),
@@ -47,9 +46,9 @@ BEGIN
 END $$
 DELIMITER ;
 
-/*-------------------------------------------------------------
+
 -- UPDATE Employer
--------------------------------------------------------------*/
+
 DELIMITER $$
 CREATE PROCEDURE update_employer(
     IN p_employer_id INT,
@@ -69,9 +68,9 @@ BEGIN
 END $$
 DELIMITER ;
 
-/*-------------------------------------------------------------
+
 -- DELETE Employer
--------------------------------------------------------------*/
+
 DELIMITER $$
 CREATE PROCEDURE delete_employer(IN p_employer_id INT)
 BEGIN
@@ -80,9 +79,9 @@ BEGIN
 END $$
 DELIMITER ;
 
-/*-------------------------------------------------------------
+
 -- ADD Job
--------------------------------------------------------------*/
+
 DELIMITER $$
 CREATE PROCEDURE add_job(
     IN p_employer_id INT,
@@ -116,9 +115,9 @@ BEGIN
 END $$
 DELIMITER ;
 
-/*-------------------------------------------------------------
+
 -- UPDATE Job
--------------------------------------------------------------*/
+
 DELIMITER $$
 CREATE PROCEDURE update_job(
     IN p_job_id INT,
@@ -162,9 +161,9 @@ BEGIN
 END $$
 DELIMITER ;
 
-/*-------------------------------------------------------------
+
 -- DELETE Job
--------------------------------------------------------------*/
+
 DELIMITER $$
 CREATE PROCEDURE delete_job(IN p_job_id INT)
 BEGIN
@@ -173,9 +172,9 @@ BEGIN
 END $$
 DELIMITER ;
 
-/*-------------------------------------------------------------
+
 -- READ Job Application
--------------------------------------------------------------*/
+
 DELIMITER $$
 CREATE PROCEDURE read_job_application(
     IN p_job_app_id INT
@@ -187,9 +186,9 @@ BEGIN
 END $$
 DELIMITER ;
 
-/*-------------------------------------------------------------
+
 -- ADD Job Application
--------------------------------------------------------------*/
+
 DELIMITER $$
 CREATE PROCEDURE add_job_application(
     IN p_job_id INT,
@@ -203,9 +202,9 @@ BEGIN
 END $$
 DELIMITER ;
 
-/*-------------------------------------------------------------
+
 -- UPDATE Job Application
--------------------------------------------------------------*/
+
 DELIMITER $$
 CREATE PROCEDURE update_job_application(
     IN p_job_id INT,
@@ -223,9 +222,9 @@ BEGIN
 END $$
 DELIMITER ;
 
-/*-------------------------------------------------------------
+
 -- DELETE Job Application
--------------------------------------------------------------*/
+
 DELIMITER $$
 CREATE PROCEDURE delete_job_application(
     IN p_job_id INT,
@@ -239,9 +238,9 @@ END $$
 DELIMITER ;
 
 
-/*-----------------------------
+
 -- GET ALL JOBS
-----------------------------*/
+
 DELIMITER $$
 CREATE PROCEDURE get_jobs()
 BEGIN
@@ -250,9 +249,9 @@ BEGIN
 END $$
 DELIMITER ;
 
-/*-----------------------------
+
 -- GET JOB BY ID
------------------------------*/
+
 DELIMITER $$
 CREATE PROCEDURE get_job_by_id(IN p_job_id INT)
 BEGIN
@@ -262,9 +261,8 @@ BEGIN
 END $$
 DELIMITER ;
 
-/*-----------------------------
+
 -- GET ALL EMPLOYERS
------------------------------*/
 DELIMITER $$
 CREATE PROCEDURE get_all_employers()
 BEGIN
@@ -273,9 +271,8 @@ BEGIN
 END $$
 DELIMITER ;
 
-/*-----------------------------
+
 -- GET ALL JOB APPLICATIONS
------------------------------*/
 DELIMITER $$
 CREATE PROCEDURE get_all_job_applications()
 BEGIN
