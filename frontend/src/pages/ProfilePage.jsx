@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../AuthContext.jsx';
 import '../styles/ProfilePage.css';
 
 const ProfilePage = () => {
+  const { userId } = useAuth(); // get the current logged-in user's ID
   const [userData, setUserData] = useState({
     firstName: '',
     lastName: '',
@@ -13,26 +15,30 @@ const ProfilePage = () => {
   });
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5001/user/1') // John Smith
+    if (!userId) return; // don't fetch if not logged in
+
+    fetch(`http://127.0.0.1:5000/user/${userId}`)
       .then(res => res.json())
-      .then(data => setUserData(data))  // ✅ fix here
+      .then(data => setUserData(data))
       .catch(err => console.error(err));
-  }, []);
+  }, [userId]);
 
   const handleChange = (e) => {
-    setUserData({...userData, [e.target.name]: e.target.value});
+    setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch('http://127.0.0.1:5001/user/1', {
+    if (!userId) return;
+
+    fetch(`http://127.0.0.1:5001/user/${userId}`, {
       method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(userData)
     })
-    .then(res => res.json())
-    .then(data => alert(data.message))
-    .catch(err => console.error(err));
+      .then(res => res.json())
+      .then(data => alert(data.message || data.error))
+      .catch(err => console.error(err));
   };
 
   return (
