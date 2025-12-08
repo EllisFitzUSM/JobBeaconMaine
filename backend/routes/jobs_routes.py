@@ -6,7 +6,7 @@ import pymysql
 jobs_routes = Blueprint("jobs_routes", __name__)
 
 # -----------------------------------------------------------
-# MODE 1: Keyword Search (simple)
+# MODE 1: Keyword Search (simple) by the word entered in the search bar
 # -----------------------------------------------------------
 @jobs_routes.get("/api/jobs/search")
 def search_jobs():
@@ -37,7 +37,7 @@ def search_jobs():
 
 
 # -----------------------------------------------------------
-# MODE 2: Filter-Based Search
+# MODE 2: Filter-Based Search based on info entered by user upon signing up
 # -----------------------------------------------------------
 @jobs_routes.get("/api/jobs/filter")
 def filter_jobs():
@@ -67,7 +67,7 @@ def filter_jobs():
 
 
 # -----------------------------------------------------------
-# MODE 3: Recommended Jobs (Stored Procedure)
+# MODE 3: Recommended Jobs (Stored Procedure based on User info in database)
 # -----------------------------------------------------------
 @jobs_routes.route("/api/jobs/recommend/<int:user_id>", methods=["GET"])
 def recommend_jobs(user_id):
