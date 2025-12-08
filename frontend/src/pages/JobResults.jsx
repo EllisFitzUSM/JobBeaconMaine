@@ -2,6 +2,11 @@ import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import JobCard from '../components/JobCard';
 import JobMaximized from './JobMaximized';
+import { useAuth } from "../AuthContext.jsx";
+
+const recommended = params.get("recommended") === "true";
+const { user } = useAuth();
+
 
 export default function JobResults() {
   const location = useLocation();
@@ -67,38 +72,46 @@ export default function JobResults() {
   };
 
   const fetchJobs = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      // Build query parameters from URL
+  try {
+    setLoading(true);
+    setError(null);
+
+    let url = "";
+
+    // Recommended mode — uses stored procedure
+    if (recommended && user?.User_ID) {
+      url = `http://localhost:5000/api/jobs/recommend/${user.User_ID}`;
+    } 
+    else {
+      // Normal search mode
       const queryParams = new URLSearchParams();
-      if (city) queryParams.append('city', city);
-      if (remote) queryParams.append('remote_pref', remote);
-      if (minSalary) queryParams.append('min_salary', minSalary);
-      
-      const url = `http://localhost:5000/api/jobs${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
-      
-      const response = await fetch(url);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      
-      if (data.success) {
-        setJobs(data.jobs);
-      } else {
-        throw new Error(data.error || 'Failed to fetch jobs');
-      }
-    } catch (err) {
-      setError(err.message);
-      console.error('Error fetching jobs:', err);
-    } finally {
-      setLoading(false);
+      if (city) queryParams.append("city", city);
+      if (remote) queryParams.append("remote_pref", remote);
+      if (minSalary) queryParams.append("min_salary", minSalary);
+      if (maxSalary) queryParams.append("max_salary", maxSalary);
+      if (keyword) queryParams.append("keyword", keyword);
+
+      url = `http://localhost:5000/api/jobs${
+        queryParams.toString() ? "?" + queryParams.toString() : ""
+      }`;
     }
-  };
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (!data.success) {
+      throw new Error(data.error || "Failed to fetch jobs");
+    }
+
+    setJobs(data.jobs);
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
 
   // Handle search form submission
   const handleSearch = (e) => {
@@ -170,7 +183,9 @@ export default function JobResults() {
   return (
     <div className="max-w-6xl mx-auto p-5">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">Job Search</h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-2">
+            {recommended ? "Recommended Jobs For You" : "Job Search"}
+        </h1>
         <p className="text-gray-600">Find your perfect job in Maine</p>
       </div>
 
