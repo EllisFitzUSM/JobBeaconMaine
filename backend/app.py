@@ -1,7 +1,7 @@
 from db_connection import *
 from flask import Flask
 from flask_cors import CORS
-from backend.routes.jobs_routes import jobs_routes  # Import the new jobs routes
+from routes.jobs_routes import jobs_routes  # Import the new jobs routes
 from routes.user import user_routes
 from routes.signup import signup_routes
 from routes.login_routes import login_routes
