@@ -1,5 +1,6 @@
 USE `job_beacon_maine`;
 
+DROP TABLE IF EXISTS Location_Lookup;
 CREATE TABLE Location_Lookup(
 zip_code CHAR(5) PRIMARY KEY,
 city VARCHAR(100),

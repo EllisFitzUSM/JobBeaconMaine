@@ -47,7 +47,6 @@ def main():
         'backend/SQL/job_application_employer_procedures.sql',
         'backend/SQL/user_procedures.sql',
         'backend/SQL/job_import_procedure.sql'
-        # 'backend/SQL/jobmatchprocedure.sql' # this needs fixin
     ]
 
     # Connect to the backend/database
@@ -95,6 +94,11 @@ def main():
                     ['Name']
                 ),
                 DataImporter(
+                    'backend/data/maine_zipcodes.csv',
+                    'sp_AddLocationLookup',
+                    ['ZIP Code', 'City', 'County']
+                ),
+                DataImporter(
                     'backend/data/new_england_indeed_jobs.csv',
                     'sp_CreateJobWithSkills',
                     ['company', 
@@ -105,9 +109,12 @@ def main():
                     'max_amount', 
                     'is_remote', 
                     'location', 
-                    'location', 
-                    'location', 
-                    {'value':'location', 'callable': shorten_zip}, 
+                    {'value':'location', 'callable': get_city},
+                    None,
+                    None,
+                    # 'location', 
+                    # 'location', 
+                    # {'value':'location', 'callable': shorten_zip}, 
                     'date_posted', 
                     {'value': 'job_url_direct','callable': shorten_app_url}, 
                     'skills'] # This is honestly bad. Just plain bad. 

@@ -13,7 +13,9 @@ class DataImporter:
         with connection.cursor() as cursor:
             args = []
             for col in self.column_mapping_order:
-                if type(col) is not str:
+                if col == None:
+                    args.append('')
+                elif type(col) is not str:
                     col_mapping = col['value']
                     str_converter = col['callable']
                     if not pd.isna(row[col_mapping]):
