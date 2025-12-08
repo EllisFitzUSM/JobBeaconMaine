@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify
 from db_connection import get_db_connection
+import bcrypt
+import pymysql   # <-- REQUIRED FIX
 
 signup_routes = Blueprint("signup_routes", __name__, url_prefix="/api")
 
@@ -9,11 +11,28 @@ def signup():
 
     try:
         conn = get_db_connection()
-        cursor = conn.cursor()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)  # <-- FIXED
 
-        # -------------------------------------------
-        # 1) INSERT INTO USER
-        # -------------------------------------------
+        # ---------------------------------------------------
+        # 0) CHECK IF USERNAME OR EMAIL ALREADY EXISTS
+        # ---------------------------------------------------
+        cursor.execute("SELECT * FROM USER WHERE Username = %s", (data["username"],))
+        if cursor.fetchone():
+            return jsonify({"error": "Username already exists"}), 400
+
+        cursor.execute("SELECT * FROM USER WHERE Email = %s", (data["email"],))
+        if cursor.fetchone():
+            return jsonify({"error": "Email already registered"}), 400
+
+        # ---------------------------------------------------
+        # 1) HASH PASSWORD
+        # ---------------------------------------------------
+        raw_password = data["password"]
+        hashed_password = bcrypt.hashpw(raw_password.encode(), bcrypt.gensalt()).decode()
+
+        # ---------------------------------------------------
+        # 2) INSERT INTO USER TABLE
+        # ---------------------------------------------------
         sql_user = """
             INSERT INTO USER (
                 Username, First_Name, Last_Name, Middle_Initial,
@@ -26,21 +45,21 @@ def signup():
             data["username"],
             data["firstName"],
             data["lastName"],
-            data.get("middleInitial", None),
+            data.get("middleInitial"),
             data["email"],
-            data["password"],  # hashing optional
-            data.get("phone", None),
-            data.get("city", None),
+            hashed_password,
+            data.get("phone"),
+            data.get("city"),
             data["county"],
-            data.get("zip", None)
+            data.get("zip"),
         )
 
         cursor.execute(sql_user, user_vals)
-        user_id = cursor.lastrowid  # ← MUST USE THIS VALUE
+        user_id = cursor.lastrowid
 
-        # -------------------------------------------
-        # 2) INSERT INTO STUDENT_ALUM
-        # -------------------------------------------
+        # ---------------------------------------------------
+        # 3) INSERT INTO STUDENT_ALUM
+        # ---------------------------------------------------
         sql_alum = """
             INSERT INTO STUDENT_ALUM (
                 User_ID, Max_Distance_Pref, Remote_Pref,
@@ -51,43 +70,48 @@ def signup():
 
         alum_vals = (
             user_id,
-            data.get("maxCommute", None),
-            data.get("remotePref", None),
-            data.get("salaryMin", None),
-            data.get("salaryMax", None)
+            data.get("maxCommute"),
+            data.get("remotePref"),
+            data.get("salaryMin"),
+            data.get("salaryMax"),
         )
 
         cursor.execute(sql_alum, alum_vals)
 
-        # -------------------------------------------
-        # 3) INSERT INTO HAS_SKILL (ONLY EXISTING SKILLS)
-        # -------------------------------------------
+        # ---------------------------------------------------
+        # 4) INSERT USER SKILLS (IF THEY EXIST)
+        # ---------------------------------------------------
         if data.get("skills"):
-            # Convert comma-separated skills to a clean list
-            skill_list = [s.strip().lower() for s in data["skills"].split(",") if s.strip()]
+            skill_list = [
+                s.strip().lower()
+                for s in data["skills"].split(",")
+                if s.strip()
+            ]
 
             for skill in skill_list:
-                # Look for matching skill in SKILL table (case-insensitive)
-                cursor.execute("SELECT idSKILL FROM SKILL WHERE LOWER(NAME) = %s", (skill,))
-                skill_row = cursor.fetchone()
+                cursor.execute(
+                    "SELECT idSKILL FROM SKILL WHERE LOWER(NAME) = %s",
+                    (skill,)
+                )
+                row = cursor.fetchone()
 
-                if skill_row:
-                    skill_id = skill_row["idSKILL"]
-
-                    # Insert user-skill relationship
+                if row:
                     cursor.execute(
                         "INSERT INTO HAS_SKILL (idUSER, idSKILL) VALUES (%s, %s)",
-                        (user_id, skill_id)
+                        (user_id, row["idSKILL"])
                     )
                 else:
-                    # Ignore unknown/misspelled skills
                     print(f"IGNORED unknown skill: {skill}")
 
         conn.commit()
 
-        return jsonify({"message": "Signup successful (skills linked)!"}), 201
+        return jsonify({
+            "success": True,
+            "message": "Signup successful!",
+            "user_id": user_id
+        }), 201
 
     except Exception as e:
         conn.rollback()
-        print("SERVER ERROR:", e)  # helpful debugging print
+        print("SERVER ERROR:", e)
         return jsonify({"error": str(e)}), 500

@@ -4,10 +4,32 @@ import { createContext, useContext, useState } from "react";
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null); // holds all user info (id, email, prefs, etc.)
+  const [user, setUser] = useState(null);
 
-  const login = (userData) => {
-    setUser(userData);
+  // SECURE LOGIN FUNCTION
+  const login = async (username, password) => {
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        return { success: false, message: data.error || "Invalid login" };
+      }
+
+      // Save the returned user info
+      setUser(data.user);
+
+      return { success: true, user: data.user };
+
+    } catch (err) {
+      console.error("Login error:", err);
+      return { success: false, message: "Network or server error" };
+    }
   };
 
   const logout = () => {
@@ -18,10 +40,8 @@ export function AuthProvider({ children }) {
     setUser((prev) => ({ ...prev, ...updatedFields }));
   };
 
-  const isLoggedIn = !!user;
-
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn, login, logout, updateUser }}>
+    <AuthContext.Provider value={{ user, login, logout, updateUser, isLoggedIn: !!user }}>
       {children}
     </AuthContext.Provider>
   );

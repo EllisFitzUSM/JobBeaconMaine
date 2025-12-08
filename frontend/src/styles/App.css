@@ -1,61 +1,255 @@
-html, body, #root {
-  height: 100%;
-  width: 100%;
+/* ========== GLOBAL LAYOUT & THEME ========== */
+
+:root {
+  --red: #c0392b;
+  --red-dark: #96281b;
+  --green: #27ae60;
+  --yellow: #f1c40f;
+  --text-main: #111827;
+  --text-muted: #4b5563;
+  --bg-main: #ffffff;
+  --bg-band: #fdf6e3; /* light warm band */
+}
+
+html,
+body,
+#root {
   margin: 0;
   padding: 0;
+  width: 100%;
+  height: 100%;
 }
 
-.container {
-  width: 100vw;
-  height: 100vh;
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  background: url("/assets/T_HeaderElongatedText.png") no-repeat center top;
+  background-size: cover;            /* image fills screen */
+  background-attachment: fixed;      /* stays while scrolling */
+  background-color: #ffffff;         /* fallback */
+}
+
+/* ========== BUTTONS ========== */
+.btn-solid-black {
+  background: #000000;
+  color: #ffffff;
+  border: 2px solid #000000;
+
+  padding: 0.6rem 1.6rem;     /* extra padding makes the pill nicer */
+  font-size: 0.95rem;
+  font-weight: 600;
+
+  border-radius: 999px;       /* <— pill shape */
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+
+.btn-solid-black:hover {
+  background: #333333;
+  border-color: #333333;
+}
+
+.btn {
+  border-radius: 999px;
+  padding: 0.6rem 1.3rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+    transform 0.1s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+/* solid red button */
+.btn-solid-red {
+  background: var(--red);
+  color: #ffffff;
+  border-color: var(--red);
+}
+
+.btn-solid-red:hover {
+  background: var(--red-dark);
+  border-color: var(--red-dark);
+}
+
+/* outline red button */
+.btn-outline-red {
+  background: transparent;
+  color: var(--red);
+  border-color: var(--red);
+}
+
+.btn-outline-red:hover {
+  background: var(--red);
+  color: #ffffff;
+}
+
+.btn-solid-green {
+  background: var(--green);
+  color: #ffffff;
+  border-color: var(--green);
+}
+
+.btn-solid-green:hover {
+  background: #1f8a4a; /* slightly darker green */
+  border-color: #1f8a4a;
+}
+
+/* ========== HOME PAGE STRUCTURE ========== */
+
+.home {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  background: rgba(255, 255, 255, 0.82); 
+  backdrop-filter: blur(2px);
+  min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+
+/* ===== HEADER ===== */
+
+.home-header {
+  display: flex;
   align-items: center;
+  justify-content: space-between;
+  padding: 18px 48px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.header-logo {
+  height: 80px;
+  width: auto;
+  object-fit: contain;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* spacing between buttons */
+}
+
+/* Ensures ProfileButton always displays properly */
+.header-profile-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px; /* prevents collapse */
+}
+
+/* ===== MAIN CONTENT ===== */
+
+.home-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Hero (search) section */
+.hero-section {
+  padding: 120px 20px 40px;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-subtitle {
+  margin-top: 8px;
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+.hero-search {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+}
+
+/* assume your SearchBar is not full-width by default; if it is, this will constrain it a bit */
+
+.search-bar {
+  width: 100%;
+  max-width: 1000px;     /* make it super wide */
+  padding: 20px 24px;    /* makes it taller */
+  font-size: 20px;       /* bigger text */
+  border: 2px solid #ccc;
+  border-radius: 12px;   /* nicer rounded edges */
+  background: #ffffff;   /* <-- makes it white */
+  box-sizing: border-box;
+  color: black;
+}
+
+.hero-search > * {
+  width: 100%;
+  max-width: 800px;
+}
+
+.hero-recommend {
+  margin-top: 10px;
+}
+
+/* ===== RESOURCES BAND ===== */
+
+.resources-band {
+  margin-top: 240px;
+  padding: 40px 20px;
   position: relative;
+  background: rgba(138, 153, 102, 0.45);  /* translucent */
+  backdrop-filter: blur(6px);             /* frosted effect */
+  overflow: hidden;
 }
 
-.top-right {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  font-size: 18px;
-  color: #e74c3c;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.top-right:hover {
-  color: #c0392b;
-}
-
-.bottom-right {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  font-size: 16px;
-  color: #3498db;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.bottom-right:hover {
-  color: #2980b9;
-}
-
-.title {
-  color: #2c3e50;
-  font-size: 48px;
-  font-weight: bold;
-  margin-bottom: 20px;
+.resources-inner {
+  max-width: 100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 5;
   text-align: center;
 }
 
-.search-bar {
-  width: 350px;
-  padding: 12px;
-  font-size: 18px;
-  border: 2px solid #ccc;
-  border-radius: 6px;
-  color: black;
+/* circle logos on each side */
+.band-circle {
+  position: absolute;
+  width: 220px;
+  height: auto;
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+.band-circle-left {
+  left: -40px;
+  top: 10px;
+}
+
+.band-circle-right {
+  right: -40px;
+  bottom: -10px;
+}
+
+/* ===== SMALL UTILS & RESPONSIVE ===== */
+
+@media (max-width: 768px) {
+  .home-header {
+    padding: 12px 20px;
+  }
+
+  .hero-section {
+    padding: 40px 16px 24px;
+  }
+
+  .band-circle {
+    width: 160px;
+    opacity: 0.12;
+  }
 }

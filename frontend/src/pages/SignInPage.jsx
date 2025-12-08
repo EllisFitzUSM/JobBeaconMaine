@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext.jsx";
+import "../styles/SignIn.css";
 
 export default function SignInPage() {
-  const [mode, setMode] = useState("signup"); // "signup" or "signin"
+  const [mode, setMode] = useState("signin");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
-
-  const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
     username: "",
@@ -31,17 +31,12 @@ export default function SignInPage() {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // --------------------------------------------------------------
-  // Handle Signup + Signin
-  // --------------------------------------------------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      // =====================================================================
-      // SIGN UP MODE
-      // =====================================================================
+      // -------------------- SIGNUP --------------------
       if (mode === "signup") {
         const res = await fetch("http://127.0.0.1:5000/api/signup", {
           method: "POST",
@@ -52,7 +47,7 @@ export default function SignInPage() {
         const data = await res.json();
 
         if (!res.ok) {
-          setError(data.error || data.message || "Signup failed.");
+          setError(data.error || "Signup failed.");
           return;
         }
 
@@ -61,55 +56,43 @@ export default function SignInPage() {
         return;
       }
 
-      // =====================================================================
-      // SIGN IN MODE (temporary behavior)
-      // =====================================================================
+      // -------------------- SIGNIN --------------------
       if (mode === "signin") {
-        // For now just simulate login
-        login(formData);
+        const result = await login(formData.username, formData.password);
+
+        if (!result.success) {
+          setError(result.message || "Invalid username or password.");
+          return;
+        }
+
         navigate("/");
       }
-
     } catch (err) {
       setError("Server error: " + err.message);
     }
   };
 
-  // --------------------------------------------------------------
-  // UI
-  // --------------------------------------------------------------
   return (
-    <div style={{ textAlign: "center", marginTop: "40px" }}>
-      <h1>{mode === "signup" ? "Create an Account" : "Sign In"}</h1>
+    <div className="auth-bg">
+      <div className="auth-card">
+        <h2 className="auth-title">
+          {mode === "signin" ? "Sign In" : "Create an Account"}
+        </h2>
 
-      {/* Toggle button */}
-      <button
-        style={{ marginBottom: "20px" }}
-        onClick={() => setMode(mode === "signup" ? "signin" : "signup")}
-      >
-        {mode === "signup"
-          ? "Already have an account? Sign In"
-          : "New user? Create an Account"}
-      </button>
+        {error && <p className="auth-error">{error}</p>}
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        <form onSubmit={handleSubmit} className="auth-form">
 
-      <form onSubmit={handleSubmit} style={{ display: "inline-block", textAlign: "left" }}>
-        
-        {/* Username */}
-        <div>
-          <label>Username:</label><br />
+          {/* Username + Password (always shown) */}
+          <label>Username</label>
           <input
             name="username"
             value={formData.username}
             onChange={handleChange}
             required
           />
-        </div>
 
-        {/* Password */}
-        <div>
-          <label>Password:</label><br />
+          <label>Password</label>
           <input
             type="password"
             name="password"
@@ -117,137 +100,152 @@ export default function SignInPage() {
             onChange={handleChange}
             required
           />
-        </div>
 
-        {/* ==========================================================
-            SIGNUP-ONLY FIELDS
-           ========================================================== */}
-        {mode === "signup" && (
-          <>
-            <div>
-              <label>First Name:</label><br />
-              <input
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-              />
+          {/* --------------------- SIGNUP FIELDS --------------------- */}
+          {mode === "signup" && (
+            <div className="signup-grid">
+
+              <div>
+                <label>First Name</label>
+                <input 
+                  name="firstName" 
+                  value={formData.firstName} 
+                  onChange={handleChange} 
+                />
+              </div>
+
+              <div>
+                <label>Last Name</label>
+                <input 
+                  name="lastName" 
+                  value={formData.lastName} 
+                  onChange={handleChange} 
+                />
+              </div>
+
+              <div>
+                <label>Middle Initial</label>
+                <input 
+                  name="middleInitial" 
+                  value={formData.middleInitial} 
+                  onChange={handleChange} 
+                />
+              </div>
+
+              <div>
+                <label>Email</label>
+                <input 
+                  type="email" 
+                  name="email" 
+                  value={formData.email} 
+                  onChange={handleChange} 
+                />
+              </div>
+
+              <div>
+                <label>Phone</label>
+                <input 
+                  name="phone" 
+                  value={formData.phone} 
+                  onChange={handleChange} 
+                />
+              </div>
+
+              <div>
+                <label>City</label>
+                <input 
+                  name="city" 
+                  value={formData.city} 
+                  onChange={handleChange} 
+                />
+              </div>
+
+              <div>
+                <label>County</label>
+                <input 
+                  name="county" 
+                  value={formData.county} 
+                  onChange={handleChange} 
+                />
+              </div>
+
+              <div>
+                <label>Zip</label>
+                <input 
+                  name="zip" 
+                  value={formData.zip} 
+                  onChange={handleChange} 
+                />
+              </div>
+
+              <div>
+                <label>Max Commute (mi)</label>
+                <input 
+                  name="maxCommute" 
+                  value={formData.maxCommute} 
+                  onChange={handleChange} 
+                />
+              </div>
+
+              <div>
+                <label>Remote Pref</label>
+                <input 
+                  name="remotePref" 
+                  value={formData.remotePref} 
+                  onChange={handleChange} 
+                  placeholder="Remote / Hybrid / On-site"
+                />
+              </div>
+
+              <div>
+                <label>Min Salary</label>
+                <input 
+                  name="salaryMin" 
+                  value={formData.salaryMin} 
+                  onChange={handleChange} 
+                />
+              </div>
+
+              <div>
+                <label>Max Salary</label>
+                <input 
+                  name="salaryMax" 
+                  value={formData.salaryMax} 
+                  onChange={handleChange} 
+                />
+              </div>
+
+              <div className="grid-full">
+                <label>Skills (comma-separated)</label>
+                <input 
+                  name="skills" 
+                  value={formData.skills} 
+                  onChange={handleChange} 
+                />
+              </div>
+
             </div>
+          )}
 
-            <div>
-              <label>Last Name:</label><br />
-              <input
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-              />
-            </div>
+          <button type="submit" className="auth-btn">
+            {mode === "signin" ? "Sign In" : "Create Account"}
+          </button>
+        </form>
 
-            <div>
-              <label>Middle Initial:</label><br />
-              <input
-                name="middleInitial"
-                value={formData.middleInitial}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div>
-              <label>Email:</label><br />
-              <input
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div>
-              <label>Phone:</label><br />
-              <input
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div>
-              <label>City:</label><br />
-              <input
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div>
-              <label>County:</label><br />
-              <input
-                name="county"
-                value={formData.county}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div>
-              <label>Zip Code:</label><br />
-              <input
-                name="zip"
-                value={formData.zip}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div>
-              <label>Max Commute (miles):</label><br />
-              <input
-                name="maxCommute"
-                value={formData.maxCommute}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div>
-              <label>Remote Preference:</label><br />
-              <input
-                name="remotePref"
-                value={formData.remotePref}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div>
-              <label>Salary Minimum:</label><br />
-              <input
-                name="salaryMin"
-                value={formData.salaryMin}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div>
-              <label>Salary Maximum:</label><br />
-              <input
-                name="salaryMax"
-                value={formData.salaryMax}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div>
-              <label>Skills:</label><br />
-              <input
-                name="skills"
-                value={formData.skills}
-                onChange={handleChange}
-              />
-            </div>
-          </>
-        )}
-
-        <button type="submit" style={{ marginTop: "20px", width: "100%" }}>
-          {mode === "signup" ? "Create Account" : "Sign In"}
-        </button>
-      </form>
+        <p className="auth-switch">
+          {mode === "signin" ? (
+            <>
+              New user?{" "}
+              <span onClick={() => setMode("signup")}>Create an Account</span>
+            </>
+          ) : (
+            <>
+              Already have an account?{" "}
+              <span onClick={() => setMode("signin")}>Sign In</span>
+            </>
+          )}
+        </p>
+      </div>
     </div>
   );
 }
