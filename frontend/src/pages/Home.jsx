@@ -18,7 +18,7 @@ export default function Home() {
 
   return (
     <div className="home">
-      
+
       {/* ===== HEADER ===== */}
       <div className="home-header">
 
@@ -67,10 +67,6 @@ export default function Home() {
         {/* Search hero section */}
         <section className="hero-section">
           <Title />
-          <p className="hero-subtitle">
-            One search for jobs across Maine. Filter, match, and discover roles
-            tailored for students & alumni.
-          </p>
 
           <div className="hero-search">
             <SearchBar />
@@ -84,19 +80,19 @@ export default function Home() {
         </section>
 
         {/* Resources band */}
-        <section className="resources-band">
+        {/* <section className="resources-band">
           <img src="/assets/T_CircleTransparent.png"
-               alt="decor"
-               className="band-circle band-circle-left" />
+            alt="decor"
+            className="band-circle band-circle-left" />
 
           <img src="/assets/T_CircleTransparent.png"
-               alt="decor"
-               className="band-circle band-circle-right" />
+            alt="decor"
+            className="band-circle band-circle-right" />
 
           <div className="resources-inner">
             <Resources />
           </div>
-        </section>
+        </section> */}
 
       </main>
 

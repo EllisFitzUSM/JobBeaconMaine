@@ -1,0 +1,178 @@
+/* ---------- MODAL OVERLAY ---------- */
+
+.job-max-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+    padding: 20px;
+}
+
+/* ---------- MODAL CONTENT ---------- */
+
+.job-max-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 56rem;
+    width: 100%;
+    max-height: 90vh;
+    overflow: auto;
+    position: relative;
+}
+
+/* ---------- BACK BUTTON ---------- */
+
+.job-max-back-btn {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #333;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.job-max-back-btn:hover {
+    background: #f5f5f5;
+    border-color: #333;
+}
+
+.job-max-back-arrow {
+    font-size: 1.2rem;
+}
+
+/* ---------- CLOSE BUTTON ---------- */
+
+.job-max-close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: #999;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.job-max-close-btn:hover {
+    color: #333;
+}
+
+/* ---------- CONTENT ---------- */
+
+.job-max-content {
+    padding: 60px 40px 40px 40px;
+}
+
+.job-max-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 16px;
+}
+
+.job-max-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    color: #666;
+    margin-bottom: 24px;
+}
+
+.job-max-salary {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c2c2c;
+    margin-bottom: 24px;
+}
+
+.job-max-section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+}
+
+.job-max-description {
+    color: #4a4a4a;
+    line-height: 1.75;
+    white-space: pre-wrap;
+    margin-bottom: 24px;
+}
+
+.job-max-info-box {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.job-max-info-box h3 {
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+}
+
+.job-max-info-item {
+    color: #4a4a4a;
+    margin-bottom: 4px;
+}
+
+.job-max-info-item strong {
+    color: #1a1a1a;
+}
+
+.job-max-expired-notice {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+    color: #991b1b;
+}
+
+.job-max-apply-section {
+    text-align: center;
+}
+
+.job-max-apply-btn {
+    display: inline-block;
+    background: #2563eb;
+    color: white;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 12px 40px;
+    font-size: 1.125rem;
+    text-decoration: none;
+    transition: background 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.job-max-apply-btn:hover {
+    background: #1d4ed8;
+}

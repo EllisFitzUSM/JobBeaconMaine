@@ -26,8 +26,6 @@ def distinct_cities():
             cursor.execute("SELECT DISTINCT ll.city FROM `Location_Lookup` AS ll")
             cities = cursor.fetchall()
 
-            print(cities)
-
             return jsonify({"success": True, "cities": [row['city'] for row in cities if row['city']]})
 
 

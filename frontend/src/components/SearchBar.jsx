@@ -16,6 +16,7 @@ export default function SearchBar() {
     <form onSubmit={handleSubmit}>
       <input
         className="search-bar"
+        style={{ minWidth: "800px", display: "block", margin: "0 auto"}}   // <— add this
         placeholder="Search jobs..."
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}

@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import JobCard from "../components/JobCard";
 import JobMaximized from "./JobMaximized.jsx";
+import ApplyModal from "../components/ApplyModal";
 import { useAuth } from "../AuthContext.jsx";
+import "../styles/JobResults.css";
 
 export default function JobResults() {
   const location = useLocation();
@@ -26,6 +28,11 @@ export default function JobResults() {
   const [error, setError] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
 
+  // Application modal state
+  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [jobToApply, setJobToApply] = useState(null);
+  const [applications, setApplications] = useState([]);
+
   const [searchFilters, setSearchFilters] = useState({
     keyword,
     city,
@@ -44,7 +51,7 @@ export default function JobResults() {
       const res = await fetch("http://localhost:5000/api/geo/cities");
       const data = await res.json();
       if (data.success) setCities(data.cities);
-    } catch (err) {ß
+    } catch (err) {
       console.error("Error fetching cities:", err);
     }
   };
@@ -127,6 +134,67 @@ export default function JobResults() {
       max_salary: "",
     });
     navigate(location.pathname);
+  };
+
+  // Handle apply button click
+  const handleApplyClick = (job) => {
+    setJobToApply(job);
+    setShowApplyModal(true);
+
+    // Open the application URL in a new tab if it exists
+    if (job.application_url) {
+      window.open(job.application_url, "_blank");
+    } else {
+      // If no application URL, you might want to construct one or use a default
+      console.log("No application URL for job:", job.job_id);
+    }
+  };
+
+  // Handle modal confirmation
+  const handleModalConfirm = async (didApply) => {
+    if (didApply && jobToApply && user?.User_ID) {
+      // Save application to backend
+      const applicationData = {
+        user_id: user.User_ID,
+        job_id: jobToApply.job_id,
+        applied_at: new Date().toISOString(),
+        status: "applied"
+      };
+
+      try {
+        const response = await fetch("http://localhost:5000/api/applications", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(applicationData)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          setApplications([...applications, {
+            ...applicationData,
+            job_title: jobToApply.job_title,
+            company_name: jobToApply.company_name
+          }]);
+          alert("Application tracked successfully!");
+        } else {
+          console.error("Failed to track application:", data.error);
+          alert("Failed to track application. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error tracking application:", error);
+        alert("Error tracking application. Please try again.");
+      }
+    }
+
+    setShowApplyModal(false);
+    setJobToApply(null);
+  };
+
+  // Handle modal cancel
+  const handleModalCancel = () => {
+    setShowApplyModal(false);
+    setJobToApply(null);
   };
 
   // Handle loading / error UI
@@ -236,14 +304,33 @@ export default function JobResults() {
         Found {jobs.length} job{jobs.length !== 1 && "s"}
       </p>
 
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-10">
         {jobs.map((job) => (
-          <JobCard key={job.job_id} job={job} onClick={setSelectedJob} />
+          <JobCard
+            key={job.job_id}
+            job={job}
+            onClick={setSelectedJob}
+            onApply={handleApplyClick}
+          />
         ))}
       </div>
 
+      {/* Job Details Modal */}
       {selectedJob && (
-        <JobMaximized job={selectedJob} onClose={() => setSelectedJob(null)} />
+        <JobMaximized
+          job={selectedJob}
+          onClose={() => setSelectedJob(null)}
+          onBack={() => setSelectedJob(null)}  // <-- ADD THIS
+        />
+      )}
+
+      {/* Apply Confirmation Modal */}
+      {showApplyModal && jobToApply && (
+        <ApplyModal
+          job={jobToApply}
+          onConfirm={handleModalConfirm}
+          onCancel={handleModalCancel}
+        />
       )}
     </div>
   );

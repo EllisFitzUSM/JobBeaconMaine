@@ -73,7 +73,7 @@ def filter_jobs():
 def recommend_jobs(user_id):
     try:
         conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
 
         cursor.callproc("jobMatchScore", (user_id,))
         cursor.execute("SELECT * FROM tmp_job_scores ORDER BY total_score DESC;")
