@@ -5,16 +5,18 @@ from db_connection import get_db_connection
 
 skill_routes = Blueprint('skills_routes', __name__, url_prefix='/api/skills')
 
-@skill_routes.get('/')
+@skill_routes.route('/', methods=["GET", "POST"])
 def skills():
     try:
         conn = get_db_connection()
         cursor = conn.cursor(pymysql.cursors.DictCursor)
 
-        data = request.json
-        if data.get('user_id') is not None:
-            return jsonify({"success": False, "error": "Unimplemented"}), 501
-        elif data.get('job_id') is not None:
+        if request.args.get('user_id') is not None:
+            if request.method == "POST":
+                cursor.execute("SELECT ")
+            else:
+                return jsonify({"success": False, "error": "Unimplemented"}), 501
+        elif request.args.get('job_id') is not None:
             return jsonify({"success": False, "error": "Unimplemented"}), 501
         else:
             cursor.callproc('sp_GetAllSkillsSorted', ())

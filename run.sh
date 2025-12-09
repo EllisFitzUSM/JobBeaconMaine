@@ -71,3 +71,6 @@ fi
 
 echo "Running Frontend"
 npm run --prefix frontend/ dev
+
+python3 backup.py --user $2 --pw $3 &
+python3 python recover.py --user $2 --pw $3 &

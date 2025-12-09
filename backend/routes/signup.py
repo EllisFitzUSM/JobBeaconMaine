@@ -50,7 +50,7 @@ def signup():
             hashed_password,
             data.get("phone"),
             data.get("city"),
-            data["county"],
+            data.get("county") or "",
             data.get("zip"),
         )
 

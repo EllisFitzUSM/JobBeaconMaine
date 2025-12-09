@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext.jsx";
+import SkillSelector from "../components/SkillSelector.jsx"
 import "../styles/SignIn.css";
 
 export default function SignInPage() {
@@ -108,9 +109,9 @@ export default function SignInPage() {
           county: formData.county === "" ? null : formData.county,
           zip: formData.zip === "" ? null : formData.zip,
           remotePref: formData.remotePref === "" ? null : formData.remotePref,
-          skills: formData.skills === "" ? null : formData.skills,
+          skills: formData.skills.length > 0 ? formData.skills.join(',') : null,
         };
-  
+
         const res = await fetch("http://127.0.0.1:5000/api/signup", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -186,9 +187,9 @@ export default function SignInPage() {
                 <label>
                   First Name <span style={{ color: "red" }}>*</span>
                 </label>
-                <input 
-                  name="firstName" 
-                  value={formData.firstName} 
+                <input
+                  name="firstName"
+                  value={formData.firstName}
                   onChange={handleChange}
                   required
                 />
@@ -198,9 +199,9 @@ export default function SignInPage() {
                 <label>
                   Last Name <span style={{ color: "red" }}>*</span>
                 </label>
-                <input 
-                  name="lastName" 
-                  value={formData.lastName} 
+                <input
+                  name="lastName"
+                  value={formData.lastName}
                   onChange={handleChange}
                   required
                 />
@@ -208,10 +209,10 @@ export default function SignInPage() {
 
               <div>
                 <label>Middle Initial</label>
-                <input 
-                  name="middleInitial" 
-                  value={formData.middleInitial} 
-                  onChange={handleChange} 
+                <input
+                  name="middleInitial"
+                  value={formData.middleInitial}
+                  onChange={handleChange}
                 />
               </div>
 
@@ -219,21 +220,21 @@ export default function SignInPage() {
                 <label>
                   Email <span style={{ color: "red" }}>*</span>
                 </label>
-                <input 
-                  type="email" 
-                  name="email" 
-                  value={formData.email} 
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
                   onChange={handleChange}
-                  required 
+                  required
                 />
               </div>
 
               <div>
                 <label>Phone</label>
-                <input 
-                  name="phone" 
-                  value={formData.phone} 
-                  onChange={handleChange} 
+                <input
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
                 />
               </div>
 
@@ -299,28 +300,28 @@ export default function SignInPage() {
 
               <div>
                 <label>County</label>
-                <input 
-                  name="county" 
-                  value={formData.county} 
-                  onChange={handleChange} 
+                <input
+                  name="county"
+                  value={formData.county}
+                  onChange={handleChange}
                 />
               </div>
 
               <div>
                 <label>Zip</label>
-                <input 
-                  name="zip" 
-                  value={formData.zip} 
-                  onChange={handleChange} 
+                <input
+                  name="zip"
+                  value={formData.zip}
+                  onChange={handleChange}
                 />
               </div>
 
               <div>
                 <label>Max Commute (mi)</label>
-                <input 
-                  name="maxCommute" 
-                  value={formData.maxCommute} 
-                  onChange={handleChange} 
+                <input
+                  name="maxCommute"
+                  value={formData.maxCommute}
+                  onChange={handleChange}
                 />
               </div>
 
@@ -341,28 +342,28 @@ export default function SignInPage() {
 
               <div>
                 <label>Min Salary</label>
-                <input 
-                  name="salaryMin" 
-                  value={formData.salaryMin} 
-                  onChange={handleChange} 
+                <input
+                  name="salaryMin"
+                  value={formData.salaryMin}
+                  onChange={handleChange}
                 />
               </div>
 
               <div>
                 <label>Max Salary</label>
-                <input 
-                  name="salaryMax" 
-                  value={formData.salaryMax} 
-                  onChange={handleChange} 
+                <input
+                  name="salaryMax"
+                  value={formData.salaryMax}
+                  onChange={handleChange}
                 />
               </div>
 
               <div className="grid-full">
-                <label>Skills (comma-separated)</label>
-                <input 
-                  name="skills" 
-                  value={formData.skills} 
-                  onChange={handleChange} 
+                <label>Skills</label>
+                <SkillSelector
+                  selectedSkills={formData.skills}
+                  onChange={(skills) => setFormData(prev => ({ ...prev, skills }))}
+                  maxSkills={10}
                 />
               </div>
 

@@ -3,6 +3,7 @@
 :root {
   --red: #c0392b;
   --red-dark: #96281b;
+  --navy: #5242e2;
   --green: #27ae60;
   --yellow: #f1c40f;
   --text-main: #111827;
@@ -81,9 +82,14 @@ body {
 
 /* outline red button */
 .btn-outline-red {
-  background: transparent;
+  background: #ffffff;
   color: var(--red);
   border-color: var(--red);
+}
+
+.btn-outline-navy:hover {
+  background: var(--navy);
+  color: #ffffff;
 }
 
 .btn-outline-red:hover {
@@ -123,6 +129,7 @@ body {
   justify-content: space-between;
   padding: 18px 48px;
   border-bottom: 1px solid #e5e7eb;
+  background: #39cb76;
 }
 
 .header-logo {
@@ -147,7 +154,7 @@ body {
 
 /* ===== MAIN CONTENT ===== */
 
-.home-main {
+/* .home-main {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -174,18 +181,18 @@ body {
   flex-direction: column;
   gap: 18px;
   align-items: center;
-}
+} */
 
 /* assume your SearchBar is not full-width by default; if it is, this will constrain it a bit */
 
 .search-bar {
-  width: 100%;
-  max-width: 1000px;     /* make it super wide */
-  padding: 20px 24px;    /* makes it taller */
-  font-size: 20px;       /* bigger text */
+  min-width: 800px;   /* ensures minimum width */
+  max-width: 1000px;
+  padding: 20px 24px;
+  font-size: 20px;
   border: 2px solid #ccc;
-  border-radius: 12px;   /* nicer rounded edges */
-  background: #ffffff;   /* <-- makes it white */
+  border-radius: 12px;
+  background: #fff;
   box-sizing: border-box;
   color: black;
 }
