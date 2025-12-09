@@ -21,4 +21,4 @@ start "Flask Server" python backend/app.py
 :frontend
 
 @echo Running Frontend
-npm run --prefix frontend/ dev
+start "Frontend" npm run --prefix frontend/ dev

@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import JobCard from "../components/JobCard";
-import JobMaximized from "./JobMaximized.jsx";
+import ApplyModal from "../components/ApplyModal";
+import Header from "../components/Header.jsx";
 import { useAuth } from "../AuthContext.jsx";
+import "../styles/JobResults.css";
 
 export default function JobResults() {
   const location = useLocation();
@@ -26,6 +28,11 @@ export default function JobResults() {
   const [error, setError] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
 
+  // Application modal state
+  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [jobToApply, setJobToApply] = useState(null);
+  const [applications, setApplications] = useState([]);
+
   const [searchFilters, setSearchFilters] = useState({
     keyword,
     city,
@@ -44,7 +51,7 @@ export default function JobResults() {
       const res = await fetch("http://localhost:5000/api/geo/cities");
       const data = await res.json();
       if (data.success) setCities(data.cities);
-    } catch (err) {ß
+    } catch (err) {
       console.error("Error fetching cities:", err);
     }
   };
@@ -129,6 +136,67 @@ export default function JobResults() {
     navigate(location.pathname);
   };
 
+  // Handle apply button click
+  const handleApplyClick = (job) => {
+    setJobToApply(job);
+    setShowApplyModal(true);
+
+    // Open the application URL in a new tab if it exists
+    if (job.application_url) {
+      window.open(job.application_url, "_blank");
+    } else {
+      // If no application URL, you might want to construct one or use a default
+      console.log("No application URL for job:", job.job_id);
+    }
+  };
+
+  // Handle modal confirmation
+  const handleModalConfirm = async (didApply) => {
+    if (didApply && jobToApply && user?.User_ID) {
+      // Save application to backend
+      const applicationData = {
+        user_id: user.User_ID,
+        job_id: jobToApply.job_id,
+        applied_at: new Date().toISOString(),
+        status: "applied"
+      };
+
+      try {
+        const response = await fetch("http://localhost:5000/api/applications", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(applicationData)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          setApplications([...applications, {
+            ...applicationData,
+            job_title: jobToApply.job_title,
+            company_name: jobToApply.company_name
+          }]);
+          alert("Application tracked successfully!");
+        } else {
+          console.error("Failed to track application:", data.error);
+          alert("Failed to track application. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error tracking application:", error);
+        alert("Error tracking application. Please try again.");
+      }
+    }
+
+    setShowApplyModal(false);
+    setJobToApply(null);
+  };
+
+  // Handle modal cancel
+  const handleModalCancel = () => {
+    setShowApplyModal(false);
+    setJobToApply(null);
+  };
+
   // Handle loading / error UI
   if (loading)
     return (
@@ -161,90 +229,104 @@ export default function JobResults() {
   if (maxSalary) activeFilters.push(`Max Salary: $${maxSalary}`);
 
   return (
-    <div className="max-w-6xl mx-auto p-5">
-      <h1 className="text-4xl font-bold text-center mb-2">
-        {recommended ? "Recommended Jobs" : "Job Search"}
-      </h1>
+    <div className="home">
 
-      {/* Search Form */}
-      <form onSubmit={handleSearch} className="bg-white p-6 shadow rounded mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <Header />
+      <div className="max-w-6xl mx-auto p-5">
+        <h1 className="text-4xl font-bold text-center mb-2">
+          {recommended ? "Recommended Jobs" : "Job Search"}
+        </h1>
 
-          <input
-            type="text"
-            value={searchFilters.keyword}
-            onChange={(e) => updateSearchFilter("keyword", e.target.value)}
-            placeholder="Keywords..."
-            className="border px-3 py-2 rounded"
-          />
+        {/* Search Form */}
+        <form onSubmit={handleSearch} className="bg-white p-6 shadow rounded mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-          <select
-            value={searchFilters.city}
-            onChange={(e) => updateSearchFilter("city", e.target.value)}
-            className="border px-3 py-2 rounded"
-          >
-            <option value="">All Cities</option>
-            {cities.map((c) => (
-              <option key={c}>{c}</option>
-            ))}
-          </select>
+            <input
+              type="text"
+              value={searchFilters.keyword}
+              onChange={(e) => updateSearchFilter("keyword", e.target.value)}
+              placeholder="Keywords..."
+              className="border px-3 py-2 rounded"
+            />
 
-          <select
-            value={searchFilters.remote}
-            onChange={(e) => updateSearchFilter("remote", e.target.value)}
-            className="border px-3 py-2 rounded"
-          >
-            <option value="">All Types</option>
-            <option value="Remote">Remote</option>
-            <option value="Hybrid">Hybrid</option>
-            <option value="On-site">On-site</option>
-          </select>
+            <select
+              value={searchFilters.city}
+              onChange={(e) => updateSearchFilter("city", e.target.value)}
+              className="border px-3 py-2 rounded"
+            >
+              <option value="">All Cities</option>
+              {cities.map((c) => (
+                <option key={c}>{c}</option>
+              ))}
+            </select>
 
-          <input
-            type="number"
-            value={searchFilters.min_salary}
-            onChange={(e) => updateSearchFilter("min_salary", e.target.value)}
-            placeholder="Min Salary"
-            className="border px-3 py-2 rounded"
-          />
+            <select
+              value={searchFilters.remote}
+              onChange={(e) => updateSearchFilter("remote", e.target.value)}
+              className="border px-3 py-2 rounded"
+            >
+              <option value="">All Types</option>
+              <option value="Remote">Remote</option>
+              <option value="Hybrid">Hybrid</option>
+              <option value="On-site">On-site</option>
+            </select>
 
-          <input
-            type="number"
-            value={searchFilters.max_salary}
-            onChange={(e) => updateSearchFilter("max_salary", e.target.value)}
-            placeholder="Max Salary"
-            className="border px-3 py-2 rounded"
-          />
+            <input
+              type="number"
+              value={searchFilters.min_salary}
+              onChange={(e) => updateSearchFilter("min_salary", e.target.value)}
+              placeholder="Min Salary"
+              className="border px-3 py-2 rounded"
+            />
+
+            <input
+              type="number"
+              value={searchFilters.max_salary}
+              onChange={(e) => updateSearchFilter("max_salary", e.target.value)}
+              placeholder="Max Salary"
+              className="border px-3 py-2 rounded"
+            />
+          </div>
+
+          <div className="flex gap-3 mt-4">
+            <button className="bg-blue-600 text-white px-6 py-2 rounded">
+              Search
+            </button>
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="bg-gray-200 px-6 py-2 rounded"
+            >
+              Clear
+            </button>
+          </div>
+        </form>
+
+        {/* Results */}
+        <p className="text-gray-600 mb-4">
+          Found {jobs.length} job{jobs.length !== 1 && "s"}
+        </p>
+
+        <div className="flex flex-col gap-10">
+          {jobs.map((job) => (
+            <JobCard
+              key={job.job_id}
+              job={job}
+              onClick={setSelectedJob}
+              onApply={handleApplyClick}
+            />
+          ))}
         </div>
 
-        <div className="flex gap-3 mt-4">
-          <button className="bg-blue-600 text-white px-6 py-2 rounded">
-            Search
-          </button>
-          <button
-            type="button"
-            onClick={clearFilters}
-            className="bg-gray-200 px-6 py-2 rounded"
-          >
-            Clear
-          </button>
-        </div>
-      </form>
-
-      {/* Results */}
-      <p className="text-gray-600 mb-4">
-        Found {jobs.length} job{jobs.length !== 1 && "s"}
-      </p>
-
-      <div className="flex flex-col gap-5">
-        {jobs.map((job) => (
-          <JobCard key={job.job_id} job={job} onClick={setSelectedJob} />
-        ))}
+        {/* Apply Confirmation Modal */}
+        {showApplyModal && jobToApply && (
+          <ApplyModal
+            job={jobToApply}
+            onConfirm={handleModalConfirm}
+            onCancel={handleModalCancel}
+          />
+        )}
       </div>
-
-      {selectedJob && (
-        <JobMaximized job={selectedJob} onClose={() => setSelectedJob(null)} />
-      )}
     </div>
   );
 }

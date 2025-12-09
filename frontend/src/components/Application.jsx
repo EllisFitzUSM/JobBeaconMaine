@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/JobCard.css";
 
-export default function JobCard({ job, onClick, onApply }) {
+export default function Application({ job, onClick, onApply }) {
     const formatSalary = (min, max) => {
         if (!min && !max) return "Not specified";
         if (!max) return `\$${Number(min).toLocaleString()}+`;

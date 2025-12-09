@@ -1,3 +1,13 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
 /* ---------- AUTH BACKGROUND ---------- */
 
 .auth-bg {
@@ -7,6 +17,8 @@
   justify-content: center;
   align-items: center;
   padding: 40px;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(6px);
 }
 
 /* ---------- CARD ---------- */
@@ -16,6 +28,8 @@
   backdrop-filter: blur(6px);
   padding: 40px 50px;
   border-radius: 16px;
+  justify-content: center;
+  align-items: center;
   width: 850px;               /* << WIDER CARD */
   box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
@@ -39,7 +53,7 @@
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;                  /* << SPACE BETWEEN TOP FIELDS */
+  gap: 16px;
 }
 
 /* INPUT STYLING */
@@ -49,6 +63,16 @@
 }
 
 .auth-form input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #000;
+  background: white;
+}
+
+.auth-form select {
   width: 100%;
   padding: 10px 14px;
   border: 1px solid #ccc;

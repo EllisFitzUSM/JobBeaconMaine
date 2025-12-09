@@ -1,0 +1,141 @@
+/* ---------- SKILL SELECTOR ---------- */
+
+.skill-selector-container {
+    position: relative;
+}
+
+.skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+    min-height: 40px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: white;
+}
+
+.skill-tags:empty {
+    display: none;
+}
+
+.skill-tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #e3f2fd;
+    color: #1565c0;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.skill-tag-remove {
+    background: none;
+    border: none;
+    color: #1565c0;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.2s ease;
+}
+
+.skill-tag-remove:hover {
+    background: rgba(21, 101, 192, 0.1);
+}
+
+.skill-input-wrapper {
+    position: relative;
+}
+
+.skill-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #000;
+    background: white;
+}
+
+.skill-input:disabled {
+    background: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.skill-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    list-style: none;
+    margin: 4px 0 0 0;
+    padding: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.skill-dropdown-item {
+    padding: 10px 14px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.2s ease;
+}
+
+.skill-dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.skill-dropdown-item:hover {
+    background: #f5f5f5;
+}
+
+.skill-dropdown-item.disabled {
+    color: #999;
+    cursor: not-allowed;
+    background: #fafafa;
+}
+
+.skill-limit-notice {
+    font-size: 0.875rem;
+    color: #666;
+    margin-top: 6px;
+    font-style: italic;
+}
+
+.skill-add-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-top: 8px;
+    transition: background 0.2s ease;
+}
+
+.skill-add-btn:hover {
+    background: #1f8a4a;
+}
+
+.skill-add-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
